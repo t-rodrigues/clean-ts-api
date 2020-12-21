@@ -1,9 +1,24 @@
-import { Encrypter } from '@/application/contracts/encrypter';
+import { Encrypter, AddAccountRepository } from '@/application/contracts';
+import { Account } from '@/domain/entities';
+import { AddAccountDTO } from '@/domain/usecases';
 import { DbAddAccount } from './db-add-account';
 
 type SutTypes = {
   sut: DbAddAccount;
   encrypterStub: Encrypter;
+  addAccountRepositoryStub: AddAccountRepository;
+};
+
+const makeSut = (): SutTypes => {
+  const encrypterStub = makeEncrypter();
+  const addAccountRepositoryStub = makeAddAccountRepository();
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub);
+
+  return {
+    sut,
+    encrypterStub,
+    addAccountRepositoryStub,
+  };
 };
 
 const makeEncrypter = (): Encrypter => {
@@ -16,14 +31,18 @@ const makeEncrypter = (): Encrypter => {
   return new EncrypterStub();
 };
 
-const makeSut = (): SutTypes => {
-  const encrypterStub = makeEncrypter();
-  const sut = new DbAddAccount(encrypterStub);
-
-  return {
-    sut,
-    encrypterStub,
-  };
+const makeAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add(accountData: AddAccountDTO): Promise<Account> {
+      return {
+        id: 'valid_id',
+        name: 'any_name',
+        email: 'any_valid_email',
+        password: 'hashed_password',
+      };
+    }
+  }
+  return new AddAccountRepositoryStub();
 };
 
 describe('DbAddAccountUseCase', () => {
@@ -53,5 +72,22 @@ describe('DbAddAccountUseCase', () => {
     };
 
     await expect(sut.add(accountData)).rejects.toThrow();
+  });
+
+  it('should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+    const addRepositorySpy = jest.spyOn(addAccountRepositoryStub, 'add');
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_password',
+      password: 'valid_password',
+    };
+
+    await sut.add(accountData);
+
+    expect(addRepositorySpy).toHaveBeenCalledWith({
+      ...accountData,
+      password: 'hashed_password',
+    });
   });
 });
