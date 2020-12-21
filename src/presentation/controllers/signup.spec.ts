@@ -1,14 +1,44 @@
-import { MissingParamError } from '@/presentation/errors';
+import { InvalidParamError, MissingParamError } from '@/presentation/errors';
 import { badRequest } from '@/presentation/helpers';
+import { HttpRequest } from '@/presentation/contracts';
 import { SignUpController } from './signup';
+import { EmailValidator } from '@/validation/contracts';
 
-const makeSut = (): SignUpController => {
-  return new SignUpController();
+type SutTypes = {
+  sut: SignUpController;
+  emailValidatorStub: EmailValidator;
 };
+
+const makeSut = (): SutTypes => {
+  const emailValidatorStub = makeEmailValidator();
+  const sut = new SignUpController(emailValidatorStub);
+  return {
+    sut,
+    emailValidatorStub,
+  };
+};
+
+const makeEmailValidator = (): EmailValidator => {
+  class EmailValidatorStub {
+    isValid(email: string): boolean {
+      return true;
+    }
+  }
+  return new EmailValidatorStub();
+};
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any_name',
+    email: 'valid_email',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+});
 
 describe('SignUpController', () => {
   it('should return 400 if no name is provided', async () => {
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         email: 'valid_email',
@@ -22,7 +52,7 @@ describe('SignUpController', () => {
   });
 
   it('should return 400 if no email is provided', async () => {
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -36,7 +66,7 @@ describe('SignUpController', () => {
   });
 
   it('should return 400 if no password is provided', async () => {
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -50,7 +80,7 @@ describe('SignUpController', () => {
   });
 
   it('should return 400 if no passwordConfirmation is provided', async () => {
-    const sut = makeSut();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -63,5 +93,15 @@ describe('SignUpController', () => {
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('passwordConfirmation')),
     );
+  });
+
+  it('should return 400 if invalid email is provided', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    const httpRequest = makeFakeRequest();
+
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
   });
 });
