@@ -1,16 +1,17 @@
-export class SignUpController {
-  handle(httpRequest: any): any {
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+} from '@/presentation/contracts';
+import { MissingParamError } from '@/presentation/errors';
+import { badRequest } from '@/presentation/helpers';
+export class SignUpController implements Controller {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     if (!httpRequest.body.name) {
-      return {
-        statusCode: 400,
-        body: new Error('Missing param: name'),
-      };
+      return badRequest(new MissingParamError('name'));
     }
     if (!httpRequest.body.email) {
-      return {
-        statusCode: 400,
-        body: new Error('Missing param: email'),
-      };
+      return badRequest(new MissingParamError('email'));
     }
   }
 }
