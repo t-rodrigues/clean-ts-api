@@ -7,18 +7,23 @@ import {
 import { badRequest, serverError } from '@/presentation/helpers';
 import { HttpRequest } from '@/presentation/contracts';
 import { EmailValidator } from '@/validation/contracts';
+import { AddAccount, AddAccountDTO } from '@/domain/usecases';
+import { Account } from '@/domain/entities';
 
 type SutTypes = {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
+  addAccountStub: AddAccount;
 };
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const sut = new SignUpController(emailValidatorStub);
+  const addAccountStub = makeAddAccount();
+  const sut = new SignUpController(emailValidatorStub, addAccountStub);
   return {
     sut,
     emailValidatorStub,
+    addAccountStub,
   };
 };
 
@@ -38,6 +43,23 @@ const makeFakeRequest = (): HttpRequest => ({
     password: 'any_password',
     passwordConfirmation: 'any_password',
   },
+});
+
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add(account: AddAccountDTO): Account {
+      return makeFakeAccount();
+    }
+  }
+
+  return new AddAccountStub();
+};
+
+const makeFakeAccount = (): Account => ({
+  id: 'valid_id',
+  name: 'any_name',
+  email: 'valid_email',
+  password: 'hashed_password',
 });
 
 describe('SignUpController', () => {
@@ -146,5 +168,19 @@ describe('SignUpController', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should call AddAccount with correct values', async () => {
+    const { sut, addAccountStub } = makeSut();
+    const httpRequest = makeFakeRequest();
+
+    const addSpy = jest.spyOn(addAccountStub, 'add');
+
+    await sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'valid_email',
+      password: 'any_password',
+    });
   });
 });
