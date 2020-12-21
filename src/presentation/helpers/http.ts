@@ -1,4 +1,5 @@
 import { HttpResponse } from '@/presentation/contracts';
+import { ServerError } from '../errors';
 
 export const ok = (body: any): HttpResponse => ({
   statusCode: 200,
@@ -33,5 +34,5 @@ export const notFound = (): HttpResponse => ({
 
 export const serverError = (error: Error) => ({
   statusCode: 500,
-  body: error.stack,
+  body: new ServerError(error.stack),
 });
