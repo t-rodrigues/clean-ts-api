@@ -1,1 +1,1 @@
-export * from './account/add-account';
+export * from './account';
