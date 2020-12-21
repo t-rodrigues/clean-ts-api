@@ -47,7 +47,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    add(account: AddAccountDTO): Account {
+    async add(account: AddAccountDTO): Promise<Account> {
       return makeFakeAccount();
     }
   }

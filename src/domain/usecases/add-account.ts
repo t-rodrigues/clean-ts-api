@@ -7,5 +7,5 @@ export type AddAccountDTO = {
 };
 
 export interface AddAccount {
-  add(addAccountData: AddAccountDTO): Account;
+  add(addAccountData: AddAccountDTO): Promise<Account>;
 }

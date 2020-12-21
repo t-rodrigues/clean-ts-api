@@ -39,7 +39,7 @@ export class SignUpController implements Controller {
         return badRequest(new InvalidParamError('email'));
       }
 
-      this.addAccount.add({
+      await this.addAccount.add({
         name,
         email,
         password,
