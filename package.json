@@ -12,9 +12,12 @@
     "test:staged": "npm test -- -o",
     "test:ci": "npm test -- --coverage"
   },
-  "dependencies": {},
+  "dependencies": {
+    "validator": "^13.5.2"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.19",
+    "@types/validator": "^13.1.1",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
     "eslint": "^7.16.0",
