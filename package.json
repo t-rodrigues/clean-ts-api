@@ -6,8 +6,11 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNotests",
     "test:unit": "npm test -- --watch -c jest.unit.config.js",
-    "test:staged": "npm test -- -o"
+    "test:integration": "npm test -- --watch -c jest.integration.config.js",
+    "test:staged": "npm test -- -o",
+    "test:ci": "npm test -- --coverage"
   },
   "dependencies": {},
   "devDependencies": {
