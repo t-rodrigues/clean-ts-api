@@ -1,7 +1,7 @@
+import { SignUpController } from './signup';
 import { InvalidParamError, MissingParamError } from '@/presentation/errors';
 import { badRequest } from '@/presentation/helpers';
 import { HttpRequest } from '@/presentation/contracts';
-import { SignUpController } from './signup';
 import { EmailValidator } from '@/validation/contracts';
 
 type SutTypes = {
@@ -103,5 +103,15 @@ describe('SignUpController', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
+  });
+
+  it('should call EmailValidor with correct value', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    const httpRequest = makeFakeRequest();
+
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid');
+
+    await sut.handle(httpRequest);
+    expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email);
   });
 });
