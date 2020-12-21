@@ -4,7 +4,7 @@ import {
   MissingParamError,
   ServerError,
 } from '@/presentation/errors';
-import { badRequest, serverError } from '@/presentation/helpers';
+import { badRequest, created, serverError } from '@/presentation/helpers';
 import { HttpRequest } from '@/presentation/contracts';
 import { EmailValidator } from '@/validation/contracts';
 import { AddAccount, AddAccountDTO } from '@/domain/usecases';
@@ -194,5 +194,13 @@ describe('SignUpController', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should return 201 if valid data is provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest = makeFakeRequest();
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(created(makeFakeAccount()));
   });
 });
