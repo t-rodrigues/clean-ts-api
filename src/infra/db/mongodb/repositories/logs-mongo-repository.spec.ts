@@ -2,6 +2,10 @@ import { MongoHelper } from '@/infra/db/mongodb';
 import { Collection } from 'mongodb';
 import { LogsMongoRepository } from './logs-mongo-repository';
 
+const makeSut = (): LogsMongoRepository => {
+  return new LogsMongoRepository();
+};
+
 describe('LogsMongoRepository', async () => {
   let logErrorCollection: Collection;
 
@@ -19,7 +23,7 @@ describe('LogsMongoRepository', async () => {
   });
 
   it('should create an error log on success', async () => {
-    const sut = new LogsMongoRepository();
+    const sut = makeSut();
     await sut.logError('any_stack');
     const count = await logErrorCollection.countDocuments();
 
