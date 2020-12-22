@@ -1,5 +1,9 @@
-import { MongoHelper } from '@/infra/db';
+import { MongoHelper } from '@/infra/db/mongodb';
 import { AccountsMongoRepository } from './accounts-mongo-repository';
+
+const makeSut = (): AccountsMongoRepository => {
+  return new AccountsMongoRepository();
+};
 
 describe('AccountsMongoRepository', () => {
   beforeAll(async () => {
@@ -10,8 +14,13 @@ describe('AccountsMongoRepository', () => {
     await MongoHelper.disconnect();
   });
 
+  beforeEach(async () => {
+    const accountCollection = MongoHelper.getCollection('accounts');
+    await accountCollection.deleteMany({});
+  });
+
   it('should return an account on success', async () => {
-    const sut = new AccountsMongoRepository();
+    const sut = makeSut();
     const account = await sut.add({
       name: 'any_name',
       email: 'any_email@mail.com',
