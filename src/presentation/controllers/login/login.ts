@@ -5,15 +5,22 @@ import {
 } from '@/presentation/contracts';
 import { MissingParamError } from '@/presentation/errors';
 import { badRequest } from '@/presentation/helpers';
+import { EmailValidator } from '@/validation/contracts';
 
 export class LoginController implements Controller {
+  constructor(private readonly emailValidator: EmailValidator) {}
+
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.email) {
-      return badRequest(new MissingParamError('email'));
+    const requiredFields = ['email', 'password'];
+
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return badRequest(new MissingParamError(field));
+      }
     }
-    if (!httpRequest.body.password) {
-      return badRequest(new MissingParamError('password'));
-    }
+
+    this.emailValidator.isValid(httpRequest.body.email);
+
     return null;
   }
 }
