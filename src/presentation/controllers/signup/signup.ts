@@ -5,7 +5,7 @@ import {
   HttpResponse,
   Validation,
 } from '@/presentation/contracts';
-import { InvalidParamError, MissingParamError } from '@/presentation/errors';
+import { InvalidParamError } from '@/presentation/errors';
 import { badRequest, created, serverError } from '@/presentation/helpers';
 import { EmailValidator } from '@/validation/contracts';
 
@@ -22,19 +22,6 @@ export class SignUpController implements Controller {
 
       if (error) {
         return badRequest(error);
-      }
-
-      const requiredFields = [
-        'name',
-        'email',
-        'password',
-        'passwordConfirmation',
-      ];
-
-      for (const field of requiredFields) {
-        if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError(field));
-        }
       }
 
       const { name, email, password, passwordConfirmation } = httpRequest.body;
