@@ -1,6 +1,6 @@
 import { EmailValidatorAdapter } from '@/infra/validators';
 import { Controller } from '@/presentation/contracts';
-import { SignUpController } from '@/presentation/controllers/signup';
+import { SignUpController } from '@/presentation/controllers/signup/signup';
 import { makeDbAddAccount, makeLogControllerDecorator } from '@/main/factories';
 
 export const makeSignUpController = (): Controller => {
