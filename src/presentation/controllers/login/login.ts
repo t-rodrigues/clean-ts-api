@@ -5,7 +5,12 @@ import {
   HttpResponse,
 } from '@/presentation/contracts';
 import { InvalidParamError, MissingParamError } from '@/presentation/errors';
-import { badRequest, serverError, unauthorized } from '@/presentation/helpers';
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from '@/presentation/helpers';
 import { EmailValidator } from '@/validation/contracts';
 
 export class LoginController implements Controller {
@@ -36,7 +41,7 @@ export class LoginController implements Controller {
       if (!accessToken) {
         return unauthorized();
       }
-      return null;
+      return ok({ accessToken });
     } catch (error) {
       return serverError(error);
     }
