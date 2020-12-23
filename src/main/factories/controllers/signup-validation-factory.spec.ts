@@ -1,5 +1,6 @@
 import { Validation } from '@/presentation/contracts';
 import {
+  CompareFieldsValidation,
   RequiredFieldValidation,
   ValidationComposite,
 } from '@/validation/validators';
@@ -16,6 +17,9 @@ describe('SignUpValidationFactory', () => {
     for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
       validations.push(new RequiredFieldValidation(field));
     }
+    validations.push(
+      new CompareFieldsValidation('password', 'passwordConfirmation'),
+    );
 
     expect(ValidationComposite).toHaveBeenCalledWith(validations);
   });

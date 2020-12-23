@@ -1,5 +1,6 @@
 import { Validation } from '@/presentation/contracts';
 import {
+  CompareFieldsValidation,
   RequiredFieldValidation,
   ValidationComposite,
 } from '@/validation/validators';
@@ -10,6 +11,9 @@ export const makeSignUpValidation = (): ValidationComposite => {
   for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
     validations.push(new RequiredFieldValidation(field));
   }
+  validations.push(
+    new CompareFieldsValidation('password', 'passwordConfirmation'),
+  );
 
   return new ValidationComposite(validations);
 };
