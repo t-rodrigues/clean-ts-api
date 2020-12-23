@@ -3,7 +3,7 @@ import {
   HttpRequest,
   HttpResponse,
 } from '@/presentation/contracts';
-import { MissingParamError } from '@/presentation/errors';
+import { InvalidParamError, MissingParamError } from '@/presentation/errors';
 import { badRequest } from '@/presentation/helpers';
 import { EmailValidator } from '@/validation/contracts';
 
@@ -19,7 +19,11 @@ export class LoginController implements Controller {
       }
     }
 
-    this.emailValidator.isValid(httpRequest.body.email);
+    const isValid = this.emailValidator.isValid(httpRequest.body.email);
+
+    if (!isValid) {
+      return badRequest(new InvalidParamError('email'));
+    }
 
     return null;
   }
