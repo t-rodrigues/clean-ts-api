@@ -3,8 +3,16 @@ import { MissingParamError } from '@/presentation/errors';
 import { badRequest } from '@/presentation/helpers';
 import { LoginController } from './login';
 
-const makeSut = (): LoginController => {
-  return new LoginController();
+type SutTypes = {
+  sut: LoginController;
+};
+
+const makeSut = (): SutTypes => {
+  const sut = new LoginController();
+
+  return {
+    sut,
+  };
 };
 
 // const makeRequest = (): HttpRequest => ({
@@ -16,7 +24,7 @@ const makeSut = (): LoginController => {
 
 describe('LoginController', () => {
   it('should return 400 if no email is provided', async () => {
-    const sut = makeSut();
+    const { sut } = makeSut();
 
     const httpRequest = {
       body: {
@@ -30,7 +38,7 @@ describe('LoginController', () => {
   });
 
   it('should return 400 if no password is provided', async () => {
-    const sut = makeSut();
+    const { sut } = makeSut();
 
     const httpRequest = {
       body: {
