@@ -1,7 +1,12 @@
 import { Authentication } from '@/domain/usecases';
 import { HttpRequest } from '@/presentation/contracts';
 import { InvalidParamError, MissingParamError } from '@/presentation/errors';
-import { badRequest, serverError, unauthorized } from '@/presentation/helpers';
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from '@/presentation/helpers';
 import { EmailValidator } from '@/validation/contracts';
 import { LoginController } from './login';
 
@@ -138,5 +143,13 @@ describe('LoginController', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('should return 200 if valid credentials are provided', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(ok({ accessToken: 'token' }));
   });
 });
