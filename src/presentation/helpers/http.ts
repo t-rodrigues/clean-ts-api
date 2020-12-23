@@ -1,5 +1,6 @@
 import { HttpResponse } from '@/presentation/contracts';
 import { ServerError } from '../errors';
+import { UnauthorizedError } from '../errors/unauthorized';
 
 export const ok = (body: any): HttpResponse => ({
   statusCode: 200,
@@ -22,14 +23,17 @@ export const badRequest = (error: Error): HttpResponse => ({
 
 export const unauthorized = (): HttpResponse => ({
   statusCode: 401,
+  body: new UnauthorizedError(),
 });
 
 export const forbidden = (): HttpResponse => ({
   statusCode: 403,
+  body: null,
 });
 
 export const notFound = (): HttpResponse => ({
   statusCode: 404,
+  body: null,
 });
 
 export const serverError = (error: Error) => ({
