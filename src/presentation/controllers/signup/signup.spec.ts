@@ -5,7 +5,7 @@ import {
   ServerError,
 } from '@/presentation/errors';
 import { badRequest, created, serverError } from '@/presentation/helpers';
-import { HttpRequest } from '@/presentation/contracts';
+import { HttpRequest, Validation } from '@/presentation/contracts';
 import { EmailValidator } from '@/validation/contracts';
 import { AddAccount, AddAccountDTO } from '@/domain/usecases';
 import { Account } from '@/domain/entities';
@@ -14,26 +14,42 @@ type SutTypes = {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
   addAccountStub: AddAccount;
+  validationStub: Validation;
 };
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
   const addAccountStub = makeAddAccount();
-  const sut = new SignUpController(emailValidatorStub, addAccountStub);
+  const validationStub = makeValidation();
+  const sut = new SignUpController(
+    emailValidatorStub,
+    addAccountStub,
+    validationStub,
+  );
   return {
     sut,
     emailValidatorStub,
     addAccountStub,
+    validationStub,
   };
 };
 
 const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub {
+  class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
       return true;
     }
   }
   return new EmailValidatorStub();
+};
+
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: any): Error | null {
+      return null;
+    }
+  }
+  return new ValidationStub();
 };
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -202,5 +218,15 @@ describe('SignUpController', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(created(makeFakeAccount()));
+  });
+
+  it('should call Validation with correct value', async () => {
+    const { sut, validationStub } = makeSut();
+    const httpRequest = makeFakeRequest();
+
+    const validateSpy = jest.spyOn(validationStub, 'validate');
+
+    await sut.handle(httpRequest);
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
