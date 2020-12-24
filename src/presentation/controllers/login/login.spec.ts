@@ -1,4 +1,4 @@
-import { Authentication } from '@/domain/usecases';
+import { Authentication, AuthenticationDTO } from '@/domain/usecases';
 import { HttpRequest, Validation } from '@/presentation/contracts';
 import { MissingParamError } from '@/presentation/errors';
 import {
@@ -17,7 +17,7 @@ type SutTypes = {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(email: string, password: string): Promise<string> {
+    async auth({ email, password }: AuthenticationDTO): Promise<string> {
       return 'token';
     }
   }
@@ -35,10 +35,12 @@ const makeValidation = (): Validation => {
 };
 
 const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    email: 'any_email@mail.com',
-    password: '123123',
-  },
+  body: makeFakeAuthenticationDTO(),
+});
+
+const makeFakeAuthenticationDTO = (): AuthenticationDTO => ({
+  email: 'any_email@mail.com',
+  password: '123123',
 });
 
 const makeSut = (): SutTypes => {
@@ -61,7 +63,7 @@ describe('LoginController', () => {
 
     await sut.handle(httpRequest);
 
-    expect(authSpy).toHaveBeenCalledWith('any_email@mail.com', '123123');
+    expect(authSpy).toHaveBeenCalledWith(makeFakeAuthenticationDTO());
   });
 
   it('should return 401 if invalid credentials are provided', async () => {
