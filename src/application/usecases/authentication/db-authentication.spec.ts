@@ -1,6 +1,7 @@
 import {
   HashComparer,
   LoadAccountByEmailRepository,
+  TokenGenerator,
 } from '@/application/contracts';
 import { Account } from '@/domain/entities';
 import { AuthenticationDTO } from '@/domain/usecases';
@@ -10,20 +11,25 @@ type SutTypes = {
   sut: DbAuthentication;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
   hashComparerStub: HashComparer;
+  tokenGeneratorStub: TokenGenerator;
 };
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
   const hashComparerStub = makeHashComparer();
+  const tokenGeneratorStub = makeTokenGenerator();
+
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
+    tokenGeneratorStub,
   );
 
   return {
     sut,
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
+    tokenGeneratorStub,
   };
 };
 
@@ -35,6 +41,16 @@ const makeHashComparer = (): HashComparer => {
   }
 
   return new HashComparerStub();
+};
+
+const makeTokenGenerator = (): TokenGenerator => {
+  class TokenGeneratorStub implements TokenGenerator {
+    async generate(payload: string): Promise<string> {
+      return 'any_token';
+    }
+  }
+
+  return new TokenGeneratorStub();
 };
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
@@ -119,5 +135,23 @@ describe('DbAuthenticationUseCase', () => {
     const accessToken = await sut.auth(makeFakeAuthentication());
 
     expect(accessToken).toBe(null);
+  });
+
+  it('should call TokenGenerator with correct id', async () => {
+    const { sut, tokenGeneratorStub } = makeSut();
+    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate');
+
+    await sut.auth(makeFakeAuthentication());
+
+    expect(generateSpy).toHaveBeenCalledWith('valid_id');
+  });
+
+  it('should throw if TokenGenerator throws', async () => {
+    const { sut, tokenGeneratorStub } = makeSut();
+    jest.spyOn(tokenGeneratorStub, 'generate').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(sut.auth(makeFakeAuthentication())).rejects.toThrow();
   });
 });
