@@ -2,6 +2,7 @@ import {
   HashComparer,
   LoadAccountByEmailRepository,
   TokenGenerator,
+  UpdateAccessTokenRepository,
 } from '@/application/contracts';
 import { Account } from '@/domain/entities';
 import { AuthenticationDTO } from '@/domain/usecases';
@@ -12,17 +13,20 @@ type SutTypes = {
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
   hashComparerStub: HashComparer;
   tokenGeneratorStub: TokenGenerator;
+  updateAccessTokenRepositoryStub: UpdateAccessTokenRepository;
 };
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
   const hashComparerStub = makeHashComparer();
   const tokenGeneratorStub = makeTokenGenerator();
+  const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository();
 
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
     tokenGeneratorStub,
+    updateAccessTokenRepositoryStub,
   );
 
   return {
@@ -30,6 +34,7 @@ const makeSut = (): SutTypes => {
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
     tokenGeneratorStub,
+    updateAccessTokenRepositoryStub,
   };
 };
 
@@ -51,6 +56,14 @@ const makeTokenGenerator = (): TokenGenerator => {
   }
 
   return new TokenGeneratorStub();
+};
+
+const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
+  class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
+    async update(userId: string, token: string): Promise<void> {}
+  }
+
+  return new UpdateAccessTokenRepositoryStub();
 };
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
@@ -160,5 +173,14 @@ describe('DbAuthenticationUseCase', () => {
     const accessToken = await sut.auth(makeFakeAuthentication());
 
     expect(accessToken).toBe('any_token');
+  });
+
+  it('should call UpdateAccessTokenRepository with correct values', async () => {
+    const { sut, updateAccessTokenRepositoryStub } = makeSut();
+    const updateSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'update');
+
+    await sut.auth(makeFakeAuthentication());
+
+    expect(updateSpy).toHaveBeenCalledWith('valid_id', 'any_token');
   });
 });
