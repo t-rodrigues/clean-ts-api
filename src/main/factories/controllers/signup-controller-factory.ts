@@ -1,5 +1,6 @@
 import { Controller } from '@/presentation/contracts';
-import { SignUpController } from '@/presentation/controllers/signup/signup-controller';
+import { SignUpController } from '@/presentation/controllers/signup';
+
 import { makeDbAddAccount, makeLogControllerDecorator } from '@/main/factories';
 import { makeSignUpValidation } from './signup-validation-factory';
 
