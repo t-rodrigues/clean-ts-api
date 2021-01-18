@@ -45,4 +45,11 @@ describe('AccountsMongoRepository', () => {
     expect(account).toBeTruthy();
     expect(account).toHaveProperty('id');
   });
+
+  it('should return if loadByEmail fails', async () => {
+    const sut = makeSut();
+    const account = await sut.loadByEmail('any_email@mail.com');
+
+    expect(account).toBeFalsy();
+  });
 });
