@@ -1,4 +1,4 @@
-import { SignUpController } from './signup';
+import { SignUpController } from './signup-controller';
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { badRequest, created, serverError } from '@/presentation/helpers';
 import { HttpRequest, Validation } from '@/presentation/contracts';

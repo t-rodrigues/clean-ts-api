@@ -7,7 +7,7 @@ import {
   serverError,
   unauthorized,
 } from '@/presentation/helpers';
-import { LoginController } from './login';
+import { LoginController } from './login-controller';
 
 type SutTypes = {
   sut: LoginController;
