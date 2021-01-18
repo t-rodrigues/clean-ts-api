@@ -53,5 +53,15 @@ describe('LoginRoutes', () => {
         })
         .expect(200);
     });
+
+    it('should return 401 on login fails', async () => {
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'thiagor_@live.com',
+          password: '123123',
+        })
+        .expect(401);
+    });
   });
 });
