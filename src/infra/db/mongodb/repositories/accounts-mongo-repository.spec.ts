@@ -52,4 +52,18 @@ describe('AccountsMongoRepository', () => {
 
     expect(account).toBeFalsy();
   });
+
+  it('should update the account accessToken on updateAccessToken success', async () => {
+    const sut = makeSut();
+    const result = await accountCollection.insertOne(makefakeAccountData());
+    const fakeAccount = result.ops[0];
+
+    expect(fakeAccount.accessToken).toBeFalsy();
+
+    await sut.updateAccessToken(fakeAccount._id, 'any_token');
+    const account = await accountCollection.findOne({ _id: fakeAccount._id });
+
+    expect(account).toBeTruthy();
+    expect(account).toHaveProperty('accessToken');
+  });
 });
