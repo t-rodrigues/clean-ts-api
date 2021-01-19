@@ -2,8 +2,8 @@ import { Controller } from '@/presentation/contracts';
 import { LoginController } from '@/presentation/controllers/login';
 
 import {
-  makeLogControllerDecorator,
   makeDbAuthentication,
+  makeLogControllerDecorator,
 } from '@/main/factories';
 import { makeLoginValidation } from './login-validation-factory';
 
