@@ -1,7 +1,7 @@
 version: "3"
 services:
   mongo:
-    container_name: mongodb
+    container_name: mongo-container
     image: mongo:3
     restart: always
     volumes:
@@ -9,11 +9,11 @@ services:
     ports:
       - "27017:27017"
   api:
-    container_name: cleantsapi
+    container_name: api-container
     image: node:14
     working_dir: /usr/src/clean-ts-api
     restart: always
-    command: bash -c "npm install --only=prod"
+    command: bash -c "npm install --only=prod && npm run debug"
     environment:
       - MONGO_URL=mongodb://mongo:27017/clean-node-api
     volumes:
