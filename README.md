@@ -7,7 +7,7 @@
 
 # **Clean Node API**
 
-[![alt text](./public/img/logo-course.png "Link para o treinamento")](https://www.udemy.com/course/tdd-com-mango/?referralCode=B53CE5CA2B9AFA5A6FA1)
+[![alt text](./docs/images/logo-course.png "Link para o treinamento")](https://www.udemy.com/course/tdd-com-mango/?referralCode=B53CE5CA2B9AFA5A6FA1)
 
 ---
 
@@ -21,12 +21,12 @@ O objetivo do treinamento é mostrar como criar uma API com uma arquitetura bem 
 
 > ## APIs construídas no treinamento
 
-1. [Cadastro](./docs/rquirements/signup.md)
-2. [Login](./docs/rquirements/login.md)
-3. [Criar enquete](./docs/rquirements/add-survey.md)
-4. [Listar enquetes](./docs/rquirements/load-surveys.md)
-5. [Responder enquete](./docs/rquirements/save-survey-result.md)
-6. [Resultado da enquete](./docs/rquirements/load-survey-result.md)
+1. [Cadastro](./docs/requirements/signup.md)
+2. [Login](./docs/requirements/login.md)
+3. [Criar enquete](./docs/requirements/add-survey.md)
+4. [Listar enquetes](./docs/requirements/load-surveys.md)
+5. [Responder enquete](./docs/requirements/save-survey-result.md)
+6. [Resultado da enquete](./docs/requirements/load-survey-result.md)
 
 > ## Princípios
 
