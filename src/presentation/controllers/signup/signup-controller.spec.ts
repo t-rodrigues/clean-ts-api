@@ -2,22 +2,34 @@ import { SignUpController } from './signup-controller';
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { badRequest, created, serverError } from '@/presentation/helpers';
 import { HttpRequest, Validation } from '@/presentation/contracts';
-import { AddAccount, AddAccountDTO } from '@/domain/usecases';
+import {
+  AddAccount,
+  AddAccountDTO,
+  Authentication,
+  AuthenticationDTO,
+} from '@/domain/usecases';
 import { Account } from '@/domain/entities';
 
 type SutTypes = {
   sut: SignUpController;
   addAccountStub: AddAccount;
+  authenticationStub: Authentication;
   validationStub: Validation;
 };
 
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount();
+  const authenticationStub = makeAuthentication();
   const validationStub = makeValidation();
-  const sut = new SignUpController(addAccountStub, validationStub);
+  const sut = new SignUpController(
+    addAccountStub,
+    authenticationStub,
+    validationStub,
+  );
   return {
     sut,
     addAccountStub,
+    authenticationStub,
     validationStub,
   };
 };
@@ -56,6 +68,16 @@ const makeFakeAccount = (): Account => ({
   email: 'valid_email',
   password: 'hashed_password',
 });
+
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth({ email, password }: AuthenticationDTO): Promise<string> {
+      return 'token';
+    }
+  }
+
+  return new AuthenticationStub();
+};
 
 describe('SignUpController', () => {
   it('should call AddAccount with correct values', async () => {
@@ -112,5 +134,18 @@ describe('SignUpController', () => {
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('any_field')),
     );
+  });
+
+  it('should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut();
+    const httpRequest = makeFakeRequest();
+    const authSpy = jest.spyOn(authenticationStub, 'auth');
+
+    await sut.handle(httpRequest);
+
+    expect(authSpy).toHaveBeenCalledWith({
+      email: 'valid_email',
+      password: 'any_password',
+    });
   });
 });
