@@ -22,7 +22,7 @@ describe('LoginRoutes', () => {
   });
 
   describe('POST /signup', () => {
-    it('should return 200 on signup', async () => {
+    it('should return 201 on signup', async () => {
       await request(app)
         .post('/api/signup')
         .send({
