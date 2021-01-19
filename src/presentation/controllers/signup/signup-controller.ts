@@ -1,4 +1,4 @@
-import { AddAccount } from '@/domain/usecases';
+import { AddAccount, Authentication } from '@/domain/usecases';
 import {
   Controller,
   HttpRequest,
@@ -9,6 +9,7 @@ import { badRequest, created, serverError } from '@/presentation/helpers';
 export class SignUpController implements Controller {
   constructor(
     private readonly addAccount: AddAccount,
+    private readonly authentication: Authentication,
     private readonly validation: Validation,
   ) {}
 
@@ -24,6 +25,11 @@ export class SignUpController implements Controller {
 
       const account = await this.addAccount.add({
         name,
+        email,
+        password,
+      });
+
+      await this.authentication.auth({
         email,
         password,
       });
