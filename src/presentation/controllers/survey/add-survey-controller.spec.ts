@@ -1,6 +1,6 @@
 import { AddSurvey, AddSurveyDTO } from '@domain/usecases/survey';
 import { HttpRequest, Validation } from '@presentation/contracts';
-import { badRequest, serverError } from '@presentation/helpers';
+import { badRequest, noContent, serverError } from '@presentation/helpers';
 
 import { AddSurveyController } from './add-survey-controller';
 
@@ -91,5 +91,13 @@ describe('AddSurveyController', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('should return 201 on success', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(noContent());
   });
 });
