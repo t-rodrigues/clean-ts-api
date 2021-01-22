@@ -1,1 +1,2 @@
-export * from './add-account/db-add-account';
+export * from './add-account';
+export * from './add-survey';
