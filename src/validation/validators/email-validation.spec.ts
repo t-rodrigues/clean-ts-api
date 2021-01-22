@@ -1,5 +1,5 @@
-import { InvalidParamError, ServerError } from '@/presentation/errors';
-import { EmailValidator } from '@/validation/contracts';
+import { InvalidParamError, ServerError } from '@presentation/errors';
+import { EmailValidator } from '@validation/contracts';
 import { EmailValidation } from './email-validation';
 
 type SutTypes = {

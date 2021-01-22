@@ -2,9 +2,9 @@ import {
   Hasher,
   AddAccountRepository,
   LoadAccountByEmailRepository,
-} from '@/application/contracts';
-import { Account } from '@/domain/entities';
-import { AddAccountDTO } from '@/domain/usecases';
+} from '@application/contracts';
+import { Account } from '@domain/entities';
+import { AddAccountDTO } from '@domain/usecases';
 import { DbAddAccount } from './db-add-account';
 
 type SutTypes = {

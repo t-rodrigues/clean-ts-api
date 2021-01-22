@@ -1,4 +1,4 @@
-import { HttpResponse } from '@/presentation/contracts';
+import { HttpResponse } from '@presentation/contracts';
 import { ServerError, UnauthorizedError } from '../errors';
 
 export const ok = (body: any): HttpResponse => ({

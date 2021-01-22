@@ -1,4 +1,4 @@
-import { Encrypter } from '@/application/contracts';
+import { Encrypter } from '@application/contracts';
 
 import jwt from 'jsonwebtoken';
 

@@ -2,9 +2,9 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
   UpdateAccessTokenRepository,
-} from '@/application/contracts';
-import { DbAccount, DbAddAccountDTO } from '@/application/dtos';
-import { MongoHelper } from '@/infra/db/mongodb';
+} from '@application/contracts';
+import { DbAccount, DbAddAccountDTO } from '@application/dtos';
+import { MongoHelper } from '@infra/db/mongodb';
 
 export class AccountsMongoRepository
   implements

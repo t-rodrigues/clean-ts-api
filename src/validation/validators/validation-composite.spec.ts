@@ -1,5 +1,5 @@
-import { Validation } from '@/presentation/contracts';
-import { MissingParamError } from '@/presentation/errors';
+import { Validation } from '@presentation/contracts';
+import { MissingParamError } from '@presentation/errors';
 import { ValidationComposite } from './validation-composite';
 
 type SutTypes = {

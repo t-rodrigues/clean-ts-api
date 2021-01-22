@@ -1,5 +1,5 @@
-import { Account } from '@/domain/entities';
-import { AddAccountDTO } from '@/domain/usecases';
+import { Account } from '@domain/entities';
+import { AddAccountDTO } from '@domain/usecases';
 
 export type DbAddAccountDTO = AddAccountDTO;
 

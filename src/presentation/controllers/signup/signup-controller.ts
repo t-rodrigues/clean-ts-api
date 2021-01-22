@@ -1,17 +1,17 @@
-import { AddAccount, Authentication } from '@/domain/usecases';
+import { AddAccount, Authentication } from '@domain/usecases';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
   Validation,
-} from '@/presentation/contracts';
-import { EmailInUseError } from '@/presentation/errors';
+} from '@presentation/contracts';
+import { EmailInUseError } from '@presentation/errors';
 import {
   badRequest,
   created,
   forbidden,
   serverError,
-} from '@/presentation/helpers';
+} from '@presentation/helpers';
 
 export class SignUpController implements Controller {
   constructor(

@@ -3,9 +3,9 @@ import {
   LoadAccountByEmailRepository,
   Encrypter,
   UpdateAccessTokenRepository,
-} from '@/application/contracts';
-import { Account } from '@/domain/entities';
-import { AuthenticationDTO } from '@/domain/usecases';
+} from '@application/contracts';
+import { Account } from '@domain/entities';
+import { AuthenticationDTO } from '@domain/usecases';
 import { DbAuthentication } from './db-authentication';
 
 type SutTypes = {

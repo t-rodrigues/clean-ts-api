@@ -1,5 +1,5 @@
-import { Validation } from '@/presentation/contracts';
-import { InvalidParamError } from '@/presentation/errors';
+import { Validation } from '@presentation/contracts';
+import { InvalidParamError } from '@presentation/errors';
 import { EmailValidator } from '../contracts';
 
 export class EmailValidation implements Validation {
