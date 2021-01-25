@@ -1,7 +1,7 @@
 import { LoadAccountByToken } from '@domain/usecases';
 import { HttpRequest, HttpResponse, Middleware } from '@presentation/contracts';
 import { AccessDeniedError } from '@presentation/errors';
-import { forbidden } from '@presentation/helpers';
+import { forbidden, ok } from '@presentation/helpers';
 
 export class AuthMiddleware implements Middleware {
   constructor(private readonly loadAccountBy: LoadAccountByToken) {}
@@ -10,10 +10,10 @@ export class AuthMiddleware implements Middleware {
     const accessToken = httpRequest.headers?.['x-access-token'];
 
     if (accessToken) {
-      const loadAccount = await this.loadAccountBy.load(accessToken);
+      const findAccount = await this.loadAccountBy.load(accessToken);
 
-      if (loadAccount) {
-        return null;
+      if (findAccount) {
+        return ok({ accountId: findAccount.id });
       }
     }
 

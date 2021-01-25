@@ -2,7 +2,7 @@ import { Account } from '@domain/entities';
 import { LoadAccountByToken } from '@domain/usecases';
 import { HttpRequest } from '@presentation/contracts';
 import { AccessDeniedError } from '@presentation/errors';
-import { forbidden } from '@presentation/helpers';
+import { forbidden, ok } from '@presentation/helpers';
 
 import { AuthMiddleware } from './auth-middleware';
 
@@ -65,5 +65,12 @@ describe('AuthMiddleware', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
+  });
+
+  it('should return 200 if LoadAccountByToken returns an account', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(ok({ accountId: 'valid_id' }));
   });
 });
