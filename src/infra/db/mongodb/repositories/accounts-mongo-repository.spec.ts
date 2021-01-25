@@ -28,42 +28,48 @@ describe('AccountsMongoRepository', () => {
     await accountCollection.deleteMany({});
   });
 
-  it('should return an account on add success', async () => {
-    const sut = makeSut();
-    const account = await sut.add(makefakeAccountData());
+  describe('add()', () => {
+    it('should return an account on add success', async () => {
+      const sut = makeSut();
+      const account = await sut.add(makefakeAccountData());
 
-    expect(account).toBeTruthy();
-    expect(account).toHaveProperty('id');
+      expect(account).toBeTruthy();
+      expect(account).toHaveProperty('id');
+    });
   });
 
-  it('should return an account on loadByEmail success', async () => {
-    const sut = makeSut();
-    await accountCollection.insertOne(makefakeAccountData());
+  describe('loadByEmail()', () => {
+    it('should return an account on loadByEmail success', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne(makefakeAccountData());
 
-    const account = await sut.loadByEmail('any_email@mail.com');
+      const account = await sut.loadByEmail('any_email@mail.com');
 
-    expect(account).toBeTruthy();
-    expect(account).toHaveProperty('id');
+      expect(account).toBeTruthy();
+      expect(account).toHaveProperty('id');
+    });
+
+    it('should return null if loadByEmail fails', async () => {
+      const sut = makeSut();
+      const account = await sut.loadByEmail('any_email@mail.com');
+
+      expect(account).toBeFalsy();
+    });
   });
 
-  it('should return if loadByEmail fails', async () => {
-    const sut = makeSut();
-    const account = await sut.loadByEmail('any_email@mail.com');
+  describe('updateAccessToken()', () => {
+    it('should update the account accessToken on updateAccessToken success', async () => {
+      const sut = makeSut();
+      const result = await accountCollection.insertOne(makefakeAccountData());
+      const fakeAccount = result.ops[0];
 
-    expect(account).toBeFalsy();
-  });
+      expect(fakeAccount.accessToken).toBeFalsy();
 
-  it('should update the account accessToken on updateAccessToken success', async () => {
-    const sut = makeSut();
-    const result = await accountCollection.insertOne(makefakeAccountData());
-    const fakeAccount = result.ops[0];
+      await sut.updateAccessToken(fakeAccount._id, 'any_token');
+      const account = await accountCollection.findOne({ _id: fakeAccount._id });
 
-    expect(fakeAccount.accessToken).toBeFalsy();
-
-    await sut.updateAccessToken(fakeAccount._id, 'any_token');
-    const account = await accountCollection.findOne({ _id: fakeAccount._id });
-
-    expect(account).toBeTruthy();
-    expect(account).toHaveProperty('accessToken');
+      expect(account).toBeTruthy();
+      expect(account).toHaveProperty('accessToken');
+    });
   });
 });

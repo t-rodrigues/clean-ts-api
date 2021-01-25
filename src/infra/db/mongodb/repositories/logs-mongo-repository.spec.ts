@@ -22,11 +22,13 @@ describe('LogsMongoRepository', async () => {
     await logErrorCollection.deleteMany({});
   });
 
-  it('should create an error log on success', async () => {
-    const sut = makeSut();
-    await sut.logError('any_stack');
-    const count = await logErrorCollection.countDocuments();
+  describe('logError()', () => {
+    it('should create an error log on success', async () => {
+      const sut = makeSut();
+      await sut.logError('any_stack');
+      const count = await logErrorCollection.countDocuments();
 
-    expect(count).toBe(1);
+      expect(count).toBe(1);
+    });
   });
 });

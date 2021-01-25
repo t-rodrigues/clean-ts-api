@@ -36,12 +36,16 @@ describe('SurveysMongoRepository', () => {
     await surveyCollection.deleteMany({});
   });
 
-  it('should add a survey on success', async () => {
-    const sut = makeSut();
-    await sut.add(makeFakeSurveyData());
+  describe('add()', () => {
+    it('should add a survey on success', async () => {
+      const sut = makeSut();
+      await sut.add(makeFakeSurveyData());
 
-    const survey = await surveyCollection.findOne({ question: 'any_question' });
+      const survey = await surveyCollection.findOne({
+        question: 'any_question',
+      });
 
-    expect(survey).toBeTruthy();
+      expect(survey).toBeTruthy();
+    });
   });
 });
