@@ -10,6 +10,7 @@ const makefakeAccountData = () => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
+  accessToken: 'any_token',
 });
 
 let accountCollection: Collection;
@@ -57,19 +58,29 @@ describe('AccountsMongoRepository', () => {
     });
   });
 
+  describe('loadByToken()', () => {
+    it('should return an account on loadByToken success without role', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne(makefakeAccountData());
+
+      const account = await sut.loadByToken('any_token');
+
+      expect(account).toBeTruthy();
+      expect(account).toHaveProperty('id');
+    });
+  });
+
   describe('updateAccessToken()', () => {
     it('should update the account accessToken on updateAccessToken success', async () => {
       const sut = makeSut();
       const result = await accountCollection.insertOne(makefakeAccountData());
       const fakeAccount = result.ops[0];
 
-      expect(fakeAccount.accessToken).toBeFalsy();
-
-      await sut.updateAccessToken(fakeAccount._id, 'any_token');
+      await sut.updateAccessToken(fakeAccount._id, 'updated_token');
       const account = await accountCollection.findOne({ _id: fakeAccount._id });
 
       expect(account).toBeTruthy();
-      expect(account).toHaveProperty('accessToken');
+      expect(account.accessToken).toBe('updated_token');
     });
   });
 });
