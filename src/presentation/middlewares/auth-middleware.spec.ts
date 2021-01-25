@@ -1,5 +1,6 @@
 import { Account } from '@domain/entities';
 import { LoadAccountByToken } from '@domain/usecases';
+import { HttpRequest } from '@presentation/contracts';
 import { AccessDeniedError } from '@presentation/errors';
 import { forbidden } from '@presentation/helpers';
 
@@ -35,6 +36,12 @@ const makeFakeAccount = (): Account => ({
   password: 'hashed_password',
 });
 
+const makeFakeRequest = (): HttpRequest => ({
+  headers: {
+    'x-access-token': 'any_token',
+  },
+});
+
 describe('AuthMiddleware', () => {
   it('should return 403 if no x-acess-token exists in headers', async () => {
     const { sut } = makeSut();
@@ -47,11 +54,7 @@ describe('AuthMiddleware', () => {
     const { sut, loadAccountByTokenStub } = makeSut();
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load');
 
-    await sut.handle({
-      headers: {
-        'x-access-token': 'any_token',
-      },
-    });
+    await sut.handle(makeFakeRequest());
 
     expect(loadSpy).toHaveBeenCalledWith('any_token');
   });
