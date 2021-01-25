@@ -6,6 +6,7 @@ import {
   RequiredFieldValidation,
   ValidationComposite,
 } from '@validation/validators';
+
 import { makeSignUpValidation } from './signup-validation-factory';
 
 jest.mock('@validation/validators/validation-composite');
