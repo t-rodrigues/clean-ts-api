@@ -4,3 +4,4 @@
 node_modules
 dist
 coverage
+src/main/config/custom-namespaces.d.ts
