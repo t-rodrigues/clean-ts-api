@@ -17,7 +17,8 @@
     "test:unit": "npm test -- --watch -c jest.unit.config.js",
     "test:integration": "npm test -- --watch -c jest.integration.config.js",
     "test:staged": "npm test -- -o",
-    "test:ci": "npm test -- --coverage"
+    "test:ci": "npm test -- --coverage",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -38,6 +39,7 @@
     "@types/validator": "^13.1.1",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
+    "coveralls": "^3.1.0",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-config-standard": "^16.0.2",
