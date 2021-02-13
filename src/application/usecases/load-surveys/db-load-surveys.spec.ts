@@ -73,4 +73,11 @@ describe('DbLoadSurvyes', () => {
 
     expect(loadAllSpy).toHaveBeenCalled();
   });
+
+  it('should return a list of Surveys on success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.load();
+
+    expect(httpResponse).toEqual(makeFakeSurveys());
+  });
 });
