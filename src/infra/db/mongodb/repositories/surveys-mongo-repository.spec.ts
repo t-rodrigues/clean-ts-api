@@ -59,5 +59,14 @@ describe('SurveysMongoRepository', () => {
 
       expect(surveys).toBeInstanceOf(Array);
     });
+
+    it('should load empty list', async () => {
+      await surveyCollection.insertOne(makeFakeSurveyData());
+
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+
+      expect(surveys).toBeInstanceOf(Array);
+    });
   });
 });
