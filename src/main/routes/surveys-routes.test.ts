@@ -9,6 +9,30 @@ import env from '@main/config/env';
 let surveysCollection: Collection;
 let accountsCollection: Collection;
 
+const makeAccessToken = async (): Promise<string> => {
+  const res = await accountsCollection.insertOne({
+    name: 'Thiago',
+    email: 'thiagor_@live.com',
+    password: '123',
+    role: 'admin',
+  });
+  const id = res.ops[0]._id;
+  const accessToken = sign({ id }, env.jwtSecret);
+
+  await accountsCollection.updateOne(
+    {
+      _id: id,
+    },
+    {
+      $set: {
+        accessToken,
+      },
+    },
+  );
+
+  return accessToken;
+};
+
 describe('SurveysRoutes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -46,25 +70,7 @@ describe('SurveysRoutes', () => {
     });
 
     it('should return 204 on add survey with valid accessToken', async () => {
-      const res = await accountsCollection.insertOne({
-        name: 'Thiago',
-        email: 'thiagor_@live.com',
-        password: '123',
-        role: 'admin',
-      });
-      const id = res.ops[0]._id;
-      const accessToken = sign({ id }, env.jwtSecret);
-
-      await accountsCollection.updateOne(
-        {
-          _id: id,
-        },
-        {
-          $set: {
-            accessToken,
-          },
-        },
-      );
+      const accessToken = await makeAccessToken();
 
       await request(app)
         .post('/api/surveys')
@@ -91,25 +97,7 @@ describe('SurveysRoutes', () => {
     });
 
     it('should return 200 on load surveys with valid accessToken', async () => {
-      const res = await accountsCollection.insertOne({
-        name: 'Thiago',
-        email: 'thiagor_@live.com',
-        password: '123',
-        role: 'admin',
-      });
-      const id = res.ops[0]._id;
-      const accessToken = sign({ id }, env.jwtSecret);
-
-      await accountsCollection.updateOne(
-        {
-          _id: id,
-        },
-        {
-          $set: {
-            accessToken,
-          },
-        },
-      );
+      const accessToken = await makeAccessToken();
 
       await surveysCollection.insertOne({
         question: 'Question',
