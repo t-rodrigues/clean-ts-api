@@ -1,5 +1,6 @@
 import { Survey } from '@domain/entities';
 import { LoadSurveys } from '@domain/usecases';
+import { noContent, ok, serverError } from '@presentation/helpers';
 import { LoadSurveysController } from './load-surveys-controller';
 
 type SutTypes = {
@@ -70,5 +71,31 @@ describe('LoadSurveysController', () => {
     const loadSpy = jest.spyOn(loadSurveysStub, 'load');
     await sut.handle({});
     expect(loadSpy).toHaveBeenCalled();
+  });
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({});
+
+    expect(httpResponse).toEqual(ok(makeFakeSurveys()));
+  });
+
+  it('should return 204 if no surveys found', async () => {
+    const { sut, loadSurveysStub } = makeSut();
+    jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(null);
+    const httpResponse = await sut.handle({});
+
+    expect(httpResponse).toEqual(noContent());
+  });
+
+  it('should return 500 if LoadSurveys throws', async () => {
+    const { sut, loadSurveysStub } = makeSut();
+    jest
+      .spyOn(loadSurveysStub, 'load')
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const httpResponse = await sut.handle({});
+
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
