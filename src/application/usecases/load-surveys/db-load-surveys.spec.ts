@@ -65,6 +65,10 @@ const makeSut = (): SutTypes => {
   };
 };
 
+jest.spyOn(Date, 'now').mockImplementation(() => {
+  return new Date(2021, 2, 12, 10).getTime();
+});
+
 describe('DbLoadSurvyes', () => {
   it('should call LoadSurveysRepository', async () => {
     const { sut, loadSurveysRepositoryStub } = makeSut();
@@ -79,5 +83,16 @@ describe('DbLoadSurvyes', () => {
     const httpResponse = await sut.load();
 
     expect(httpResponse).toEqual(makeFakeSurveys());
+  });
+
+  it('should throw if LoadSurveysRepository throws', async () => {
+    const { sut, loadSurveysRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadSurveysRepositoryStub, 'loadAll')
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+    await expect(sut.load()).rejects.toThrow();
   });
 });
