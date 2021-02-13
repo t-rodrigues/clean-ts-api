@@ -1,11 +1,8 @@
-export interface Answer {
-  image?: string;
-  answer: string;
-}
+import { SurveyAnswer } from '@domain/entities';
 
 export interface AddSurveyDTO {
   question: string;
-  answers: Answer[];
+  answers: SurveyAnswer[];
   date: Date;
 }
 
