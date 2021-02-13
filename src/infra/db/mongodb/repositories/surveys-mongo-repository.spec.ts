@@ -49,4 +49,15 @@ describe('SurveysMongoRepository', () => {
       expect(survey).toBeTruthy();
     });
   });
+
+  describe('loadAll()', () => {
+    it('should load all surveys on success', async () => {
+      await surveyCollection.insertOne(makeFakeSurveyData());
+
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+
+      expect(surveys).toBeInstanceOf(Array);
+    });
+  });
 });
