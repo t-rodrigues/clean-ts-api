@@ -65,6 +65,10 @@ const makeSut = (): SutTypes => {
   };
 };
 
+jest.spyOn(Date, 'now').mockImplementation(() => {
+  return new Date(2021, 2, 12, 10).getTime();
+});
+
 describe('LoadSurveysController', () => {
   it('should call LoadSurveys', async () => {
     const { sut, loadSurveysStub } = makeSut();
@@ -82,7 +86,10 @@ describe('LoadSurveysController', () => {
 
   it('should return 204 if LoadSurveys returns empty', async () => {
     const { sut, loadSurveysStub } = makeSut();
-    jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(null);
+    jest
+      .spyOn(loadSurveysStub, 'load')
+      .mockReturnValueOnce(Promise.resolve([]));
+
     const httpResponse = await sut.handle({});
 
     expect(httpResponse).toEqual(noContent());
