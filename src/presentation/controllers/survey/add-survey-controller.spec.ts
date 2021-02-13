@@ -1,4 +1,4 @@
-import { AddSurvey, AddSurveyDTO } from '@domain/usecases/survey';
+import { AddSurvey, AddSurveyDTO } from '@domain/usecases';
 import { HttpRequest, Validation } from '@presentation/contracts';
 import { badRequest, noContent, serverError } from '@presentation/helpers';
 
@@ -51,7 +51,12 @@ const makeFakeRequest = (): HttpRequest => ({
         answer: 'any_answer',
       },
     ],
+    date: new Date(Date.now()),
   },
+});
+
+jest.spyOn(Date, 'now').mockImplementation(() => {
+  return new Date(2021, 2, 12, 10).getTime();
 });
 
 describe('AddSurveyController', () => {

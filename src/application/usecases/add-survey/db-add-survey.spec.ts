@@ -1,5 +1,5 @@
 import { AddSurveyRepository } from '@application/contracts';
-import { AddSurveyDTO } from '@domain/usecases/survey';
+import { AddSurveyDTO } from '@domain/usecases';
 
 import { DbAddSurvey } from './db-add-survey';
 
@@ -36,6 +36,11 @@ const makeFakeAddSurvey = (): AddSurveyDTO => ({
       answer: 'kkkkkk',
     },
   ],
+  date: new Date(Date.now()),
+});
+
+jest.spyOn(Date, 'now').mockImplementation(() => {
+  return new Date(2021, 2, 12, 10).getTime();
 });
 
 describe('DbAddSurvey Usecase', () => {

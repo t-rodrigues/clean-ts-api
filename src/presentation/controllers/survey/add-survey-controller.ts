@@ -1,4 +1,4 @@
-import { AddSurvey } from '@domain/usecases/survey';
+import { AddSurvey } from '@domain/usecases';
 import {
   Controller,
   HttpRequest,
@@ -23,7 +23,11 @@ export class AddSurveyController implements Controller {
 
       const { question, answers } = httpRequest.body;
 
-      await this.addSurvey.add({ question, answers });
+      await this.addSurvey.add({
+        question,
+        answers,
+        date: new Date(Date.now()),
+      });
 
       return noContent();
     } catch (error) {
