@@ -1,5 +1,7 @@
-import { LoadAccountByTokenRepository } from '@application/contracts';
-import { Decrypter } from '@application/contracts/cryptography/decrypter';
+import {
+  LoadAccountByTokenRepository,
+  Decrypter,
+} from '@application/contracts';
 import { Account } from '@domain/entities';
 
 import { DbLoadAccountByToken } from './db-load-account-by-token';
