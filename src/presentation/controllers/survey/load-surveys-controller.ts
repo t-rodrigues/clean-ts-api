@@ -1,6 +1,10 @@
-import { LoadSurveys } from '@domain/usecases';
-import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts';
-import { noContent, ok, serverError } from '@presentation/helpers';
+import { LoadSurveys } from '@/domain/usecases';
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+} from '@/presentation/contracts';
+import { noContent, ok, serverError } from '@/presentation/helpers';
 
 export class LoadSurveysController implements Controller {
   constructor(private readonly loadSurveys: LoadSurveys) {}

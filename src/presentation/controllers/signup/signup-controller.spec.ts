@@ -1,23 +1,24 @@
-import { SignUpController } from './signup-controller';
 import {
   EmailInUseError,
   MissingParamError,
   ServerError,
-} from '@presentation/errors';
+} from '@/presentation/errors';
 import {
   badRequest,
   created,
   forbidden,
   serverError,
-} from '@presentation/helpers';
-import { HttpRequest, Validation } from '@presentation/contracts';
+} from '@/presentation/helpers';
+import { HttpRequest, Validation } from '@/presentation/contracts';
 import {
   AddAccount,
   AddAccountDTO,
   Authentication,
   AuthenticationDTO,
-} from '@domain/usecases';
-import { Account } from '@domain/entities';
+} from '@/domain/usecases';
+import { Account } from '@/domain/entities';
+
+import { SignUpController } from './signup-controller';
 
 type SutTypes = {
   sut: SignUpController;

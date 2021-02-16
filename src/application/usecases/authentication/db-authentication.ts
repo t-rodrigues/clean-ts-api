@@ -3,8 +3,8 @@ import {
   LoadAccountByEmailRepository,
   Encrypter,
   UpdateAccessTokenRepository,
-} from '@application/contracts';
-import { Authentication, AuthenticationDTO } from '@domain/usecases';
+} from '@/application/contracts';
+import { Authentication, AuthenticationDTO } from '@/domain/usecases';
 
 export class DbAuthentication implements Authentication {
   constructor(

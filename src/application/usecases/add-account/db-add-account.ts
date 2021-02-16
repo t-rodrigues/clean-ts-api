@@ -2,9 +2,9 @@ import {
   AddAccountRepository,
   Hasher,
   LoadAccountByEmailRepository,
-} from '@application/contracts';
-import { AddAccount, AddAccountDTO } from '@domain/usecases';
-import { Account } from '@domain/entities';
+} from '@/application/contracts';
+import { AddAccount, AddAccountDTO } from '@/domain/usecases';
+import { Account } from '@/domain/entities';
 
 export class DbAddAccount implements AddAccount {
   constructor(

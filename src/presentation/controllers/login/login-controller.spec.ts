@@ -1,12 +1,12 @@
-import { Authentication, AuthenticationDTO } from '@domain/usecases';
-import { HttpRequest, Validation } from '@presentation/contracts';
-import { MissingParamError } from '@presentation/errors';
+import { Authentication, AuthenticationDTO } from '@/domain/usecases';
+import { HttpRequest, Validation } from '@/presentation/contracts';
+import { MissingParamError } from '@/presentation/errors';
 import {
   badRequest,
   ok,
   serverError,
   unauthorized,
-} from '@presentation/helpers';
+} from '@/presentation/helpers';
 import { LoginController } from './login-controller';
 
 type SutTypes = {

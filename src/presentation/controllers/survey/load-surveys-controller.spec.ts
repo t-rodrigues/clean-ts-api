@@ -1,6 +1,7 @@
-import { Survey } from '@domain/entities';
-import { LoadSurveys } from '@domain/usecases';
-import { noContent, ok, serverError } from '@presentation/helpers';
+import { Survey } from '@/domain/entities';
+import { LoadSurveys } from '@/domain/usecases';
+import { noContent, ok, serverError } from '@/presentation/helpers';
+
 import { LoadSurveysController } from './load-surveys-controller';
 
 type SutTypes = {
@@ -19,7 +20,7 @@ const makeFakeSurveys = (): Survey[] => {
           answer: 'any_answer',
         },
       ],
-      date: new Date(Date.now()),
+      date: new Date(),
     },
     {
       id: '2',
@@ -30,7 +31,7 @@ const makeFakeSurveys = (): Survey[] => {
           answer: 'any_answer',
         },
       ],
-      date: new Date(Date.now()),
+      date: new Date(),
     },
     {
       id: '3',
@@ -41,7 +42,7 @@ const makeFakeSurveys = (): Survey[] => {
           answer: 'any_answer',
         },
       ],
-      date: new Date(Date.now()),
+      date: new Date(),
     },
   ];
 };
@@ -65,9 +66,7 @@ const makeSut = (): SutTypes => {
   };
 };
 
-jest.spyOn(Date, 'now').mockImplementation(() => {
-  return new Date(2021, 2, 12, 10).getTime();
-});
+jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 12, 8));
 
 describe('LoadSurveysController', () => {
   it('should call LoadSurveys', async () => {

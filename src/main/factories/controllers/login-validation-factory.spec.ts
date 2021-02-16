@@ -1,13 +1,13 @@
-import { Validation } from '@presentation/contracts';
-import { EmailValidator } from '@validation/contracts';
+import { Validation } from '@/presentation/contracts';
+import { EmailValidator } from '@/validation/contracts';
 import {
   EmailValidation,
   RequiredFieldValidation,
   ValidationComposite,
-} from '@validation/validators';
+} from '@/validation/validators';
 import { makeLoginValidation } from './login-validation-factory';
 
-jest.mock('@validation/validators/validation-composite');
+jest.mock('@/validation/validators/validation-composite');
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {

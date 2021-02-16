@@ -1,8 +1,8 @@
 import {
   AddSurveyRepository,
   LoadSurveysRepository,
-} from '@application/contracts';
-import { DbAddSurveyDTO, DbSurvey } from '@application/dtos';
+} from '@/application/contracts';
+import { DbAddSurveyDTO, DbSurvey } from '@/application/dtos';
 import { MongoHelper } from '../mongo-helper';
 
 export class SurveysMongoRepository

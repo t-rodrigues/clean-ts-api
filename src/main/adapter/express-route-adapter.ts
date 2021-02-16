@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Controller, HttpRequest } from '@presentation/contracts';
+import { Controller, HttpRequest } from '@/presentation/contracts';
 
 export const expressAdapterRoute = (controller: Controller) => {
   return async (req: Request, res: Response) => {

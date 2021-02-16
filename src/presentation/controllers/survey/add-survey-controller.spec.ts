@@ -1,6 +1,6 @@
-import { AddSurvey, AddSurveyDTO } from '@domain/usecases';
-import { HttpRequest, Validation } from '@presentation/contracts';
-import { badRequest, noContent, serverError } from '@presentation/helpers';
+import { AddSurvey, AddSurveyDTO } from '@/domain/usecases';
+import { HttpRequest, Validation } from '@/presentation/contracts';
+import { badRequest, noContent, serverError } from '@/presentation/helpers';
 
 import { AddSurveyController } from './add-survey-controller';
 
@@ -51,13 +51,11 @@ const makeFakeRequest = (): HttpRequest => ({
         answer: 'any_answer',
       },
     ],
-    date: new Date(Date.now()),
+    date: new Date(),
   },
 });
 
-jest.spyOn(Date, 'now').mockImplementation(() => {
-  return new Date(2021, 2, 12, 10).getTime();
-});
+jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 12, 8));
 
 describe('AddSurveyController', () => {
   it('should call Validation with correct values', async () => {

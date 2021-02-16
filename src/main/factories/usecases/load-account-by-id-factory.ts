@@ -1,8 +1,8 @@
-import { DbLoadAccountByToken } from '@application/usecases';
-import { JWTAdapter } from '@infra/cryptography';
-import { AccountsMongoRepository } from '@infra/db/mongodb';
+import { DbLoadAccountByToken } from '@/application/usecases';
+import { JWTAdapter } from '@/infra/cryptography';
+import { AccountsMongoRepository } from '@/infra/db/mongodb';
 
-import env from '@main/config/env';
+import env from '@/main/config/env';
 
 export const makeDbLoadAccountByToken = (): DbLoadAccountByToken => {
   const accountsMongoRepository = new AccountsMongoRepository();

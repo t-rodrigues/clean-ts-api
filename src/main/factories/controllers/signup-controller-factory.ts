@@ -1,11 +1,11 @@
-import { Controller } from '@presentation/contracts';
-import { SignUpController } from '@presentation/controllers/signup';
+import { Controller } from '@/presentation/contracts';
+import { SignUpController } from '@/presentation/controllers/signup';
 
 import {
   makeDbAddAccount,
   makeDbAuthentication,
   makeLogControllerDecorator,
-} from '@main/factories';
+} from '@/main/factories';
 import { makeSignUpValidation } from './signup-validation-factory';
 
 export const makeSignUpController = (): Controller => {

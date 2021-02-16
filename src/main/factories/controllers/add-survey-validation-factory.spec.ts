@@ -1,11 +1,11 @@
-import { Validation } from '@presentation/contracts';
+import { Validation } from '@/presentation/contracts';
 import {
   RequiredFieldValidation,
   ValidationComposite,
-} from '@validation/validators';
+} from '@/validation/validators';
 import { makeAddSurveyValidation } from './add-survey-validation';
 
-jest.mock('@validation/validators/validation-composite');
+jest.mock('@/validation/validators/validation-composite');
 
 describe('AddSurveyValidationFactory', () => {
   it('should call ValidationComposite with all validations', async () => {

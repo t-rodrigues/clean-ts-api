@@ -1,5 +1,5 @@
-import { AddSurveyRepository } from '@application/contracts';
-import { AddSurvey, AddSurveyDTO } from '@domain/usecases';
+import { AddSurveyRepository } from '@/application/contracts';
+import { AddSurvey, AddSurveyDTO } from '@/domain/usecases';
 
 export class DbAddSurvey implements AddSurvey {
   constructor(private readonly addSurveyRepository: AddSurveyRepository) {}

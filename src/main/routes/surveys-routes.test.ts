@@ -2,9 +2,9 @@ import request from 'supertest';
 import { Collection } from 'mongodb';
 import { sign } from 'jsonwebtoken';
 
-import app from '@main/config/app';
-import { MongoHelper } from '@infra/db/mongodb';
-import env from '@main/config/env';
+import app from '@/main/config/app';
+import { MongoHelper } from '@/infra/db/mongodb';
+import env from '@/main/config/env';
 
 let surveysCollection: Collection;
 let accountsCollection: Collection;

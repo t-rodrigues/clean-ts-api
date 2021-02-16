@@ -1,11 +1,11 @@
-import { AddSurvey } from '@domain/usecases';
+import { AddSurvey } from '@/domain/usecases';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
   Validation,
-} from '@presentation/contracts';
-import { badRequest, noContent, serverError } from '@presentation/helpers';
+} from '@/presentation/contracts';
+import { badRequest, noContent, serverError } from '@/presentation/helpers';
 
 export class AddSurveyController implements Controller {
   constructor(
@@ -26,7 +26,7 @@ export class AddSurveyController implements Controller {
       await this.addSurvey.add({
         question,
         answers,
-        date: new Date(Date.now()),
+        date: new Date(),
       });
 
       return noContent();

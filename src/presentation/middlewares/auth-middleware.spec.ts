@@ -1,8 +1,8 @@
-import { Account } from '@domain/entities';
-import { LoadAccountByToken } from '@domain/usecases';
-import { HttpRequest } from '@presentation/contracts';
-import { AccessDeniedError } from '@presentation/errors';
-import { forbidden, ok, serverError } from '@presentation/helpers';
+import { Account } from '@/domain/entities';
+import { LoadAccountByToken } from '@/domain/usecases';
+import { HttpRequest } from '@/presentation/contracts';
+import { AccessDeniedError } from '@/presentation/errors';
+import { forbidden, ok, serverError } from '@/presentation/helpers';
 
 import { AuthMiddleware } from './auth-middleware';
 

@@ -1,9 +1,9 @@
 import {
   Decrypter,
   LoadAccountByTokenRepository,
-} from '@application/contracts';
-import { Account } from '@domain/entities';
-import { LoadAccountByToken } from '@domain/usecases';
+} from '@/application/contracts';
+import { Account } from '@/domain/entities';
+import { LoadAccountByToken } from '@/domain/usecases';
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
   constructor(
@@ -19,7 +19,6 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
         accessToken,
         role,
       );
-
       if (account) {
         return account;
       }

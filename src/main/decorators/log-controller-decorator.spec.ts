@@ -1,6 +1,11 @@
-import { LogErrorRepository } from '@application/contracts';
-import { Controller, HttpRequest, HttpResponse } from '@presentation/contracts';
-import { serverError } from '@presentation/helpers';
+import { LogErrorRepository } from '@/application/contracts';
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+} from '@/presentation/contracts';
+import { serverError } from '@/presentation/helpers';
+
 import { LogControllerDecorator } from './log-controller-decorator';
 
 type SutTypes = {

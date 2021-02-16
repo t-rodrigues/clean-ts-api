@@ -1,5 +1,5 @@
-import { LoadSurveysRepository } from '@application/contracts';
-import { Survey } from '@domain/entities';
+import { LoadSurveysRepository } from '@/application/contracts';
+import { Survey } from '@/domain/entities';
 
 import { DbLoadSurveys } from './db-load-surveys';
 
@@ -19,7 +19,7 @@ const makeFakeSurveys = (): Survey[] => {
           answer: 'any_answer',
         },
       ],
-      date: new Date(Date.now()),
+      date: new Date(),
     },
     {
       id: '2',
@@ -30,7 +30,7 @@ const makeFakeSurveys = (): Survey[] => {
           answer: 'any_answer',
         },
       ],
-      date: new Date(Date.now()),
+      date: new Date(),
     },
     {
       id: '3',
@@ -41,7 +41,7 @@ const makeFakeSurveys = (): Survey[] => {
           answer: 'any_answer',
         },
       ],
-      date: new Date(Date.now()),
+      date: new Date(),
     },
   ];
 };
@@ -65,9 +65,7 @@ const makeSut = (): SutTypes => {
   };
 };
 
-jest.spyOn(Date, 'now').mockImplementation(() => {
-  return new Date(2021, 2, 12, 10).getTime();
-});
+jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 12, 8));
 
 describe('DbLoadSurvyes', () => {
   it('should call LoadSurveysRepository', async () => {

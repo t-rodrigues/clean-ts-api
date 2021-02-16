@@ -1,6 +1,6 @@
 import { Collection } from 'mongodb';
+import { MongoHelper } from '@/infra/db/mongodb';
 
-import { MongoHelper } from '@infra/db/mongodb';
 import { SurveysMongoRepository } from './surveys-mongo-repository';
 
 const makeSut = (): SurveysMongoRepository => {

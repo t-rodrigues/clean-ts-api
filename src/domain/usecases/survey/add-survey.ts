@@ -1,10 +1,10 @@
-import { SurveyAnswer } from '@domain/entities';
+import { SurveyAnswer } from '@/domain/entities';
 
-export interface AddSurveyDTO {
+export type AddSurveyDTO = {
   question: string;
   answers: SurveyAnswer[];
   date: Date;
-}
+};
 
 export interface AddSurvey {
   add(addSurveyData: AddSurveyDTO): Promise<void>;
