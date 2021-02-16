@@ -57,7 +57,7 @@ describe('DbLoadSurveyById UseCase', () => {
     expect(httpResponse).toEqual(makeFakeSurvey());
   });
 
-  it('should throw if LoadSurveysRepository throws', async () => {
+  it('should throw if LoadSurveyByIdRepository throws', async () => {
     const { sut, loadSurveyByIdRepositoryStub } = makeSut();
     jest
       .spyOn(loadSurveyByIdRepositoryStub, 'loadById')
