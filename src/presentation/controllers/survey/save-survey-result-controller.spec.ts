@@ -143,5 +143,16 @@ describe('SaveSurveyResultController', () => {
         answer: 'any_valid_answer',
       });
     });
+
+    it('should return 500 if SaveSurveyResult throws', async () => {
+      const { sut, saveSurveyResultStub } = makeSut();
+      jest
+        .spyOn(saveSurveyResultStub, 'save')
+        .mockReturnValueOnce(Promise.reject(new Error()));
+
+      const httpResponse = await sut.handle(makeFakeRequest());
+
+      expect(httpResponse).toEqual(serverError(new Error()));
+    });
   });
 });
