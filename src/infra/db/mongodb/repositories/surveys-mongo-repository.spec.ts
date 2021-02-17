@@ -69,4 +69,15 @@ describe('SurveysMongoRepository', () => {
       expect(surveys).toBeInstanceOf(Array);
     });
   });
+
+  describe('loadById()', () => {
+    it('should load survey by id on success', async () => {
+      const res = await surveyCollection.insertOne(makeFakeSurveyData());
+      const { _id: id } = res.ops[0];
+      const sut = makeSut();
+      const survey = await sut.loadById(id);
+
+      expect(survey).toBeTruthy();
+    });
+  });
 });
