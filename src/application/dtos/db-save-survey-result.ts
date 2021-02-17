@@ -1,5 +1,6 @@
-import { SaveSurveyResult, SaveSurveyResultDTO } from '@/domain/usecases';
+import { SurveyResult } from '@/domain/entities';
+import { SaveSurveyResultDTO } from '@/domain/usecases';
 
 export type DbSaveSurveyResultDTO = SaveSurveyResultDTO;
 
-export type DbSaveSurveyResult = SaveSurveyResult;
+export type DbSurveyResult = SurveyResult;
