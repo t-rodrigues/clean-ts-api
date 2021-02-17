@@ -1,5 +1,5 @@
 import { Controller } from '@/presentation/contracts';
-import { LoginController } from '@/presentation/controllers/login';
+import { LoginController } from '@/presentation/controllers';
 import {
   makeDbAuthentication,
   makeLogControllerDecorator,

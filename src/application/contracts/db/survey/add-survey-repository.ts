@@ -1,4 +1,4 @@
-import { AddSurveyDTO } from '@/domain/usecases/survey';
+import { AddSurveyDTO } from '@/domain/usecases';
 
 export interface AddSurveyRepository {
   add(addSurveyDTO: AddSurveyDTO): Promise<void>;

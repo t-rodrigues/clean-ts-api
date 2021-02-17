@@ -19,6 +19,7 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
         accessToken,
         role,
       );
+
       if (account) {
         return account;
       }
