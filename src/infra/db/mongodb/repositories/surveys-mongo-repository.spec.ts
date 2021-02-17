@@ -58,6 +58,7 @@ describe('SurveysMongoRepository', () => {
       const surveys = await sut.loadAll();
 
       expect(surveys).toBeInstanceOf(Array);
+      expect(surveys[0].id).toHaveProperty('id');
     });
 
     it('should load empty list', async () => {
@@ -78,6 +79,7 @@ describe('SurveysMongoRepository', () => {
       const survey = await sut.loadById(id);
 
       expect(survey).toBeTruthy();
+      expect(survey).toHaveProperty('id');
     });
   });
 });

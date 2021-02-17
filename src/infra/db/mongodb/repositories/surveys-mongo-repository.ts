@@ -19,13 +19,15 @@ export class SurveysMongoRepository
 
   async loadAll(): Promise<DbSurvey[]> {
     const surveysCollection = await MongoHelper.getCollection('surveys');
+    const surveys = await surveysCollection.find().toArray();
 
-    return surveysCollection.find().toArray();
+    return surveys && MongoHelper.mapCollection(surveys);
   }
 
   async loadById(id: string): Promise<DbSurvey> {
     const surveysCollection = await MongoHelper.getCollection('surveys');
+    const survey = await surveysCollection.findOne({ _id: id });
 
-    return surveysCollection.findOne({ _id: id });
+    return survey && MongoHelper.map(survey);
   }
 }
