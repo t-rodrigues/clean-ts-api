@@ -4,7 +4,9 @@ import { Controller, HttpRequest } from '@/presentation/contracts';
 export const expressAdapterRoute = (controller: Controller) => {
   return async (req: Request, res: Response) => {
     const httpRequest: HttpRequest = {
-      body: req.body,
+      body: req.body || {},
+      params: req.params || {},
+      accountId: req.accountId,
     };
 
     const { statusCode, body } = await controller.handle(httpRequest);

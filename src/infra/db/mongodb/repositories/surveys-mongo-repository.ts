@@ -4,6 +4,7 @@ import {
   LoadSurveysRepository,
 } from '@/application/contracts';
 import { DbAddSurveyDTO, DbSurvey } from '@/application/dtos';
+import { ObjectId } from 'mongodb';
 import { MongoHelper } from '../mongo-helper';
 
 export class SurveysMongoRepository
@@ -26,7 +27,7 @@ export class SurveysMongoRepository
 
   async loadById(id: string): Promise<DbSurvey> {
     const surveysCollection = await MongoHelper.getCollection('surveys');
-    const survey = await surveysCollection.findOne({ _id: id });
+    const survey = await surveysCollection.findOne({ _id: new ObjectId(id) });
 
     return survey && MongoHelper.map(survey);
   }

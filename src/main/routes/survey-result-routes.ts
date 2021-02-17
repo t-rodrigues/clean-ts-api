@@ -5,7 +5,7 @@ import { auth } from '../middlewares';
 
 export default (router: Router): void => {
   router.put(
-    '/surveys/:accountId/results',
+    '/surveys/:surveyId/results',
     auth,
     expressAdapterRoute(makeSaveSurveyResultController()),
   );

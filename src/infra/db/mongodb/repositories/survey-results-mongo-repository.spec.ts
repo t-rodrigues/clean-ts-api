@@ -2,7 +2,7 @@ import { Collection } from 'mongodb';
 import { DbAccount, DbSurvey } from '@/application/dtos';
 import { MongoHelper } from '@/infra/db/mongodb';
 
-import { SaveSurveyResultMongoRepository } from './save-survey-mongo-repository';
+import { SaveSurveyResultMongoRepository } from './survey-results-mongo-repository';
 
 const makeSut = (): SaveSurveyResultMongoRepository => {
   return new SaveSurveyResultMongoRepository();

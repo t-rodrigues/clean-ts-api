@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { SaveSurveyResultRepository } from '@/application/contracts';
 import { DbSurveyResult, DbSaveSurveyResultDTO } from '@/application/dtos';
 import { MongoHelper } from '../mongo-helper';
@@ -10,8 +11,8 @@ export class SaveSurveyResultMongoRepository
     );
     const surveyResult = await surveyResultCollection.findOneAndUpdate(
       {
-        surveyId: saveSurveyData.surveyId,
-        accountId: saveSurveyData.accountId,
+        surveyId: new ObjectId(saveSurveyData.surveyId),
+        accountId: new ObjectId(saveSurveyData.accountId),
       },
       {
         $set: {
