@@ -2,7 +2,7 @@ import { Survey, SurveyResult } from '@/domain/entities';
 import {
   LoadSurveyById,
   SaveSurveyResult,
-  SaveSurveyResultDTO,
+  SaveSurveyResultParams,
 } from '@/domain/usecases';
 import { HttpRequest } from '@/presentation/contracts';
 import { InvalidParamError } from '@/presentation/errors';
@@ -43,7 +43,7 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 
 const makeSaveSurveyResult = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
-    async save(data: SaveSurveyResultDTO): Promise<SurveyResult> {
+    async save(data: SaveSurveyResultParams): Promise<SurveyResult> {
       return makeFakeSurveyResult();
     }
   }

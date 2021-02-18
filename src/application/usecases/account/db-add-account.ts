@@ -3,7 +3,7 @@ import {
   Hasher,
   LoadAccountByEmailRepository,
 } from '@/application/contracts';
-import { AddAccount, AddAccountDTO } from '@/domain/usecases';
+import { AddAccount, AddAccountParams } from '@/domain/usecases';
 import { Account } from '@/domain/entities';
 
 export class DbAddAccount implements AddAccount {
@@ -13,7 +13,7 @@ export class DbAddAccount implements AddAccount {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
   ) {}
 
-  async add(accountData: AddAccountDTO): Promise<Account> {
+  async add(accountData: AddAccountParams): Promise<Account> {
     const findAccount = await this.loadAccountByEmailRepository.loadByEmail(
       accountData.email,
     );

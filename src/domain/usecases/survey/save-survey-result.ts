@@ -1,7 +1,7 @@
 import { SurveyResult } from '@/domain/entities';
 
-export type SaveSurveyResultDTO = Omit<SurveyResult, 'id'>;
+export type SaveSurveyResultParams = Omit<SurveyResult, 'id'>;
 
 export interface SaveSurveyResult {
-  save(saveSurveyDTO: SaveSurveyResultDTO): Promise<SurveyResult>;
+  save(saveSurveyDTO: SaveSurveyResultParams): Promise<SurveyResult>;
 }

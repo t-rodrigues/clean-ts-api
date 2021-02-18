@@ -1,10 +1,10 @@
 import { AddSurveyRepository } from '@/application/contracts';
-import { AddSurvey, AddSurveyDTO } from '@/domain/usecases';
+import { AddSurvey, AddSurveyParams } from '@/domain/usecases';
 
 export class DbAddSurvey implements AddSurvey {
   constructor(private readonly addSurveyRepository: AddSurveyRepository) {}
 
-  async add(addSurveyDTO: AddSurveyDTO): Promise<void> {
+  async add(addSurveyDTO: AddSurveyParams): Promise<void> {
     await this.addSurveyRepository.add(addSurveyDTO);
   }
 }

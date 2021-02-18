@@ -3,7 +3,7 @@ import {
   LoadSurveyByIdRepository,
   LoadSurveysRepository,
 } from '@/application/contracts';
-import { DbAddSurveyDTO, DbSurvey } from '@/application/dtos';
+import { DbAddSurveyParams, DbSurvey } from '@/application/dtos';
 import { ObjectId } from 'mongodb';
 import { MongoHelper } from '../mongo-helper';
 
@@ -12,7 +12,7 @@ export class SurveysMongoRepository
     AddSurveyRepository,
     LoadSurveysRepository,
     LoadSurveyByIdRepository {
-  async add(addSurveyData: DbAddSurveyDTO): Promise<void> {
+  async add(addSurveyData: DbAddSurveyParams): Promise<void> {
     const surveysCollection = await MongoHelper.getCollection('surveys');
 
     await surveysCollection.insertOne(addSurveyData);

@@ -1,8 +1,8 @@
-export interface AuthenticationDTO {
+export interface AuthenticationParams {
   email: string;
   password: string;
 }
 
 export interface Authentication {
-  auth({ email, password }: AuthenticationDTO): Promise<string>;
+  auth({ email, password }: AuthenticationParams): Promise<string>;
 }

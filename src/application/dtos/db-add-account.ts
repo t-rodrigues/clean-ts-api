@@ -1,6 +1,6 @@
 import { Account } from '@/domain/entities';
-import { AddAccountDTO } from '@/domain/usecases';
+import { AddAccountParams } from '@/domain/usecases';
 
-export type DbAddAccountDTO = AddAccountDTO;
+export type DbAddAccountParams = AddAccountParams;
 
 export type DbAccount = Account;

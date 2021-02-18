@@ -1,3 +1,3 @@
-import { AddSurveyDTO } from '@/domain/usecases';
+import { AddSurveyParams } from '@/domain/usecases';
 
-export type DbAddSurveyDTO = AddSurveyDTO;
+export type DbAddSurveyParams = AddSurveyParams;

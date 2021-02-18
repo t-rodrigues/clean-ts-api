@@ -1,4 +1,4 @@
-import { Authentication, AuthenticationDTO } from '@/domain/usecases';
+import { Authentication, AuthenticationParams } from '@/domain/usecases';
 import { HttpRequest, Validation } from '@/presentation/contracts';
 import { MissingParamError } from '@/presentation/errors';
 import {
@@ -17,7 +17,7 @@ type SutTypes = {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth({ email, password }: AuthenticationDTO): Promise<string> {
+    async auth({ email, password }: AuthenticationParams): Promise<string> {
       return 'token';
     }
   }
@@ -38,7 +38,7 @@ const makeFakeRequest = (): HttpRequest => ({
   body: makeFakeAuthenticationDTO(),
 });
 
-const makeFakeAuthenticationDTO = (): AuthenticationDTO => ({
+const makeFakeAuthenticationDTO = (): AuthenticationParams => ({
   email: 'any_email@mail.com',
   password: '123123',
 });

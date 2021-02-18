@@ -5,7 +5,7 @@ import {
   UpdateAccessTokenRepository,
 } from '@/application/contracts';
 import { Account } from '@/domain/entities';
-import { AuthenticationDTO } from '@/domain/usecases';
+import { AuthenticationParams } from '@/domain/usecases';
 
 import { DbAuthentication } from './db-authentication';
 
@@ -85,7 +85,7 @@ const makeFakeAccount = (): Account => ({
   password: 'hashed_password',
 });
 
-const makeFakeAuthentication = (): AuthenticationDTO => ({
+const makeFakeAuthentication = (): AuthenticationParams => ({
   email: 'any_email@mail.com',
   password: 'any_password',
 });

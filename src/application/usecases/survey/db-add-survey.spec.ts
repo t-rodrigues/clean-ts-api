@@ -1,5 +1,5 @@
 import { AddSurveyRepository } from '@/application/contracts';
-import { AddSurveyDTO } from '@/domain/usecases';
+import { AddSurveyParams } from '@/domain/usecases';
 
 import { DbAddSurvey } from './db-add-survey';
 
@@ -28,7 +28,7 @@ const makeAddSurveyRepository = (): AddSurveyRepository => {
   return new AddSurveyRepository();
 };
 
-const makeFakeAddSurvey = (): AddSurveyDTO => ({
+const makeFakeAddSurvey = (): AddSurveyParams => ({
   question: 'any_question',
   answers: [
     {

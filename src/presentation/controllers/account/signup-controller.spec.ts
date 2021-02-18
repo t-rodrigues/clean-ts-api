@@ -12,9 +12,9 @@ import {
 import { HttpRequest, Validation } from '@/presentation/contracts';
 import {
   AddAccount,
-  AddAccountDTO,
+  AddAccountParams,
   Authentication,
-  AuthenticationDTO,
+  AuthenticationParams,
 } from '@/domain/usecases';
 import { Account } from '@/domain/entities';
 
@@ -64,7 +64,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(account: AddAccountDTO): Promise<Account> {
+    async add(account: AddAccountParams): Promise<Account> {
       return makeFakeAccount();
     }
   }
@@ -81,7 +81,7 @@ const makeFakeAccount = (): Account => ({
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth({ email, password }: AuthenticationDTO): Promise<string> {
+    async auth({ email, password }: AuthenticationParams): Promise<string> {
       return 'token';
     }
   }

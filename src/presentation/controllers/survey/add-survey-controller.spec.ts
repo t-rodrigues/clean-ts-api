@@ -1,4 +1,4 @@
-import { AddSurvey, AddSurveyDTO } from '@/domain/usecases';
+import { AddSurvey, AddSurveyParams } from '@/domain/usecases';
 import { HttpRequest, Validation } from '@/presentation/contracts';
 import { badRequest, noContent, serverError } from '@/presentation/helpers';
 
@@ -24,7 +24,7 @@ const makeSut = (): SutTypes => {
 
 const makeAddSurvey = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
-    async add(surveyData: AddSurveyDTO): Promise<void> {
+    async add(surveyData: AddSurveyParams): Promise<void> {
       return null;
     }
   }

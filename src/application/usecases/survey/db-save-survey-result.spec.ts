@@ -1,6 +1,6 @@
 import { SaveSurveyResultRepository } from '@/application/contracts';
 import { SurveyResult } from '@/domain/entities';
-import { SaveSurveyResultDTO } from '@/domain/usecases';
+import { SaveSurveyResultParams } from '@/domain/usecases';
 
 import { DbSaveSurveyResult } from './db-save-survey-result';
 
@@ -21,7 +21,9 @@ const makeSut = (): SutTypes => {
 
 const makeSaveSurveyResultRepository = (): SaveSurveyResultRepository => {
   class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
-    async save(saveSurveyResult: SaveSurveyResultDTO): Promise<SurveyResult> {
+    async save(
+      saveSurveyResult: SaveSurveyResultParams,
+    ): Promise<SurveyResult> {
       return makeFakeSaveSurveyResult();
     }
   }

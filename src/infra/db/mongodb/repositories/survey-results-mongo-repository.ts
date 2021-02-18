@@ -1,11 +1,13 @@
 import { ObjectId } from 'mongodb';
 import { SaveSurveyResultRepository } from '@/application/contracts';
-import { DbSurveyResult, DbSaveSurveyResultDTO } from '@/application/dtos';
+import { DbSurveyResult, DbSaveSurveyResultParams } from '@/application/dtos';
 import { MongoHelper } from '../mongo-helper';
 
 export class SaveSurveyResultMongoRepository
   implements SaveSurveyResultRepository {
-  async save(saveSurveyData: DbSaveSurveyResultDTO): Promise<DbSurveyResult> {
+  async save(
+    saveSurveyData: DbSaveSurveyResultParams,
+  ): Promise<DbSurveyResult> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults',
     );

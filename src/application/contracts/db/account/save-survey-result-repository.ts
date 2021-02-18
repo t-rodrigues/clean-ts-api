@@ -1,6 +1,6 @@
 import { SurveyResult } from '@/domain/entities';
-import { SaveSurveyResultDTO } from '@/domain/usecases';
+import { SaveSurveyResultParams } from '@/domain/usecases';
 
 export interface SaveSurveyResultRepository {
-  save(data: SaveSurveyResultDTO): Promise<SurveyResult>;
+  save(data: SaveSurveyResultParams): Promise<SurveyResult>;
 }
