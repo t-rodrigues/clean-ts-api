@@ -2,24 +2,11 @@ import { Collection } from 'mongodb';
 import { MongoHelper } from '@/infra/db/mongodb';
 
 import { SurveysMongoRepository } from './surveys-mongo-repository';
+import { mockAddSurveyParams } from '@/domain/test/mocks';
 
 const makeSut = (): SurveysMongoRepository => {
   return new SurveysMongoRepository();
 };
-
-const makeFakeSurveyData = () => ({
-  question: 'any_question',
-  answers: [
-    {
-      image: 'any_image',
-      answer: 'any_answer',
-    },
-    {
-      answer: 'other_answer',
-    },
-  ],
-  date: new Date(),
-});
 
 let surveyCollection: Collection;
 
@@ -40,7 +27,7 @@ describe('SurveysMongoRepository', () => {
   describe('add()', () => {
     it('should add a survey on success', async () => {
       const sut = makeSut();
-      await sut.add(makeFakeSurveyData());
+      await sut.add(mockAddSurveyParams());
 
       const survey = await surveyCollection.findOne({
         question: 'any_question',
@@ -52,7 +39,7 @@ describe('SurveysMongoRepository', () => {
 
   describe('loadAll()', () => {
     it('should load all surveys on success', async () => {
-      await surveyCollection.insertOne(makeFakeSurveyData());
+      await surveyCollection.insertOne(mockAddSurveyParams());
 
       const sut = makeSut();
       const surveys = await sut.loadAll();
@@ -62,7 +49,7 @@ describe('SurveysMongoRepository', () => {
     });
 
     it('should load empty list', async () => {
-      await surveyCollection.insertOne(makeFakeSurveyData());
+      await surveyCollection.insertOne(mockAddSurveyParams());
 
       const sut = makeSut();
       const surveys = await sut.loadAll();
@@ -73,7 +60,7 @@ describe('SurveysMongoRepository', () => {
 
   describe('loadById()', () => {
     it('should load survey by id on success', async () => {
-      const res = await surveyCollection.insertOne(makeFakeSurveyData());
+      const res = await surveyCollection.insertOne(mockAddSurveyParams());
       const { _id: id } = res.ops[0];
       const sut = makeSut();
       const survey = await sut.loadById(id);

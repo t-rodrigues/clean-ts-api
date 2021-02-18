@@ -1,30 +1,21 @@
-import { Validation } from '@/presentation/contracts';
 import { MissingParamError } from '@/presentation/errors';
+import { ValidationSpy } from '@/presentation/test/mocks';
 
 import { ValidationComposite } from './validation-composite';
 
 type SutTypes = {
   sut: ValidationComposite;
-  validationStubs: Validation[];
+  validationStubs: ValidationSpy[];
 };
 
 const makeSut = (): SutTypes => {
-  const validationStubs = [makeValidation(), makeValidation()];
+  const validationStubs = [new ValidationSpy(), new ValidationSpy()];
   const sut = new ValidationComposite(validationStubs);
+
   return {
     sut,
     validationStubs,
   };
-};
-
-const makeValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(input: any): Error | null {
-      return null;
-    }
-  }
-
-  return new ValidationStub();
 };
 
 describe('ValidateComposite', () => {
@@ -44,7 +35,6 @@ describe('ValidateComposite', () => {
     jest
       .spyOn(validationStubs[1], 'validate')
       .mockReturnValueOnce(new MissingParamError('field'));
-
     const error = sut.validate({ field: 'any_value' });
 
     expect(error).toEqual(new Error());
@@ -52,7 +42,6 @@ describe('ValidateComposite', () => {
 
   it('should not return if validation success', async () => {
     const { sut } = makeSut();
-
     const error = sut.validate({ field: 'any_value' });
 
     expect(error).toBeFalsy();

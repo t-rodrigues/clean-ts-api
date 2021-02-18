@@ -1,67 +1,20 @@
-import { LoadSurveysRepository } from '@/application/contracts';
-import { Survey } from '@/domain/entities';
+import { LoadSurveysRepositorySpy } from '@/application/test/mocks';
+import { mockSurveys, throwError } from '@/domain/test/mocks';
 
 import { DbLoadSurveys } from './db-load-surveys';
 
 type SutTypes = {
   sut: DbLoadSurveys;
-  loadSurveysRepositoryStub: LoadSurveysRepository;
-};
-
-const makeFakeSurveys = (): Survey[] => {
-  return [
-    {
-      id: '1',
-      question: 'Question 1',
-      answers: [
-        {
-          image: 'any_image',
-          answer: 'any_answer',
-        },
-      ],
-      date: new Date(),
-    },
-    {
-      id: '2',
-      question: 'Question 2',
-      answers: [
-        {
-          image: 'any_image',
-          answer: 'any_answer',
-        },
-      ],
-      date: new Date(),
-    },
-    {
-      id: '3',
-      question: 'Question 3',
-      answers: [
-        {
-          image: 'any_image',
-          answer: 'any_answer',
-        },
-      ],
-      date: new Date(),
-    },
-  ];
-};
-
-const makeLoadSurveysRepository = (): LoadSurveysRepository => {
-  class LoadSurveysRepositoryStub implements LoadSurveysRepository {
-    async loadAll(): Promise<Survey[]> {
-      return Promise.resolve(makeFakeSurveys());
-    }
-  }
-  return new LoadSurveysRepositoryStub();
+  loadSurveysRepositorySpy: LoadSurveysRepositorySpy;
 };
 
 const makeSut = (): SutTypes => {
-  const loadSurveysRepositoryStub = makeLoadSurveysRepository();
-  const sut = new DbLoadSurveys(loadSurveysRepositoryStub);
+  const loadSurveysRepositorySpy = new LoadSurveysRepositorySpy();
+  const sut = new DbLoadSurveys(loadSurveysRepositorySpy);
 
   return {
     sut,
-    loadSurveysRepositoryStub,
+    loadSurveysRepositorySpy,
   };
 };
 
@@ -69,8 +22,8 @@ jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 12, 8));
 
 describe('DbLoadSurvyes', () => {
   it('should call LoadSurveysRepository', async () => {
-    const { sut, loadSurveysRepositoryStub } = makeSut();
-    const loadAllSpy = jest.spyOn(loadSurveysRepositoryStub, 'loadAll');
+    const { sut, loadSurveysRepositorySpy } = makeSut();
+    const loadAllSpy = jest.spyOn(loadSurveysRepositorySpy, 'loadAll');
     await sut.load();
 
     expect(loadAllSpy).toHaveBeenCalled();
@@ -80,16 +33,14 @@ describe('DbLoadSurvyes', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.load();
 
-    expect(httpResponse).toEqual(makeFakeSurveys());
+    expect(httpResponse).toEqual(mockSurveys());
   });
 
   it('should throw if LoadSurveysRepository throws', async () => {
-    const { sut, loadSurveysRepositoryStub } = makeSut();
+    const { sut, loadSurveysRepositorySpy } = makeSut();
     jest
-      .spyOn(loadSurveysRepositoryStub, 'loadAll')
-      .mockImplementationOnce(() => {
-        throw new Error();
-      });
+      .spyOn(loadSurveysRepositorySpy, 'loadAll')
+      .mockImplementationOnce(throwError);
 
     await expect(sut.load()).rejects.toThrow();
   });
