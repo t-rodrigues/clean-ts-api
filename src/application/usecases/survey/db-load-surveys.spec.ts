@@ -29,19 +29,19 @@ describe('DbLoadSurvyes', () => {
     expect(loadAllSpy).toHaveBeenCalled();
   });
 
+  it('should throw if LoadSurveysRepository throws', async () => {
+    const { sut, loadSurveysRepositorySpy } = makeSut();
+    jest
+      .spyOn(loadSurveysRepositorySpy, 'loadAll')
+      .mockRejectedValueOnce(throwError);
+
+    await expect(sut.load()).rejects.toThrow();
+  });
+
   it('should return a list of Surveys on success', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.load();
 
     expect(httpResponse).toEqual(mockSurveys());
-  });
-
-  it('should throw if LoadSurveysRepository throws', async () => {
-    const { sut, loadSurveysRepositorySpy } = makeSut();
-    jest
-      .spyOn(loadSurveysRepositorySpy, 'loadAll')
-      .mockImplementationOnce(throwError);
-
-    await expect(sut.load()).rejects.toThrow();
   });
 });

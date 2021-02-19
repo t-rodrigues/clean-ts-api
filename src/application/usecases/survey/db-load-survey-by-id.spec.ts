@@ -28,19 +28,19 @@ describe('DbLoadSurveyById UseCase', () => {
     expect(loadById).toHaveBeenCalledWith('any_id');
   });
 
+  it('should throw if LoadSurveyByIdRepository throws', async () => {
+    const { sut, loadSurveyByIdRepositorySpy } = makeSut();
+    jest
+      .spyOn(loadSurveyByIdRepositorySpy, 'loadById')
+      .mockRejectedValueOnce(throwError);
+
+    await expect(sut.loadById('any_id')).rejects.toThrow();
+  });
+
   it('should return a Survey on success', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.loadById('any_id');
 
     expect(httpResponse).toEqual(mockSurvey());
-  });
-
-  it('should throw if LoadSurveyByIdRepository throws', async () => {
-    const { sut, loadSurveyByIdRepositorySpy } = makeSut();
-    jest
-      .spyOn(loadSurveyByIdRepositorySpy, 'loadById')
-      .mockImplementationOnce(throwError);
-
-    await expect(sut.loadById('any_id')).rejects.toThrow();
   });
 });

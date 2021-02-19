@@ -31,7 +31,6 @@ describe('DbLoadAccountByTokenUseCase', () => {
     it('should call Decrypter with correct values', async () => {
       const { sut, decrypterSpy } = makeSut();
       const decryptSpy = jest.spyOn(decrypterSpy, 'decrypt');
-
       await sut.load('any_token', 'any_role');
 
       expect(decryptSpy).toHaveBeenCalledWith('any_token');
@@ -39,8 +38,7 @@ describe('DbLoadAccountByTokenUseCase', () => {
 
     it('should return null if Decrypter returns null', async () => {
       const { sut, decrypterSpy } = makeSut();
-      jest.spyOn(decrypterSpy, 'decrypt').mockReturnValueOnce(null);
-
+      jest.spyOn(decrypterSpy, 'decrypt').mockResolvedValueOnce(null);
       const account = await sut.load('any_token', 'any_role');
 
       expect(account).toBeNull();
@@ -48,7 +46,7 @@ describe('DbLoadAccountByTokenUseCase', () => {
 
     it('should throw if Decripter throws', async () => {
       const { sut, decrypterSpy } = makeSut();
-      jest.spyOn(decrypterSpy, 'decrypt').mockImplementationOnce(throwError);
+      jest.spyOn(decrypterSpy, 'decrypt').mockRejectedValueOnce(throwError);
 
       await expect(sut.load('any_token', 'any_role')).rejects.toThrow();
     });
@@ -61,27 +59,25 @@ describe('DbLoadAccountByTokenUseCase', () => {
         loadAccountByTokenRepositorySpy,
         'loadByToken',
       );
-
       await sut.load('any_token', 'any_role');
 
       expect(loadByTokenSpy).toHaveBeenCalledWith('any_token', 'any_role');
-    });
-
-    it('should return an account on success', async () => {
-      const { sut } = makeSut();
-
-      const account = await sut.load('any_token', 'any_role');
-
-      expect(account).toEqual(mockAccount());
     });
 
     it('should throw if LoadAccountByTokenRepository throws', async () => {
       const { sut, loadAccountByTokenRepositorySpy } = makeSut();
       jest
         .spyOn(loadAccountByTokenRepositorySpy, 'loadByToken')
-        .mockImplementationOnce(throwError);
+        .mockRejectedValueOnce(throwError);
 
       await expect(sut.load('any_token', 'any_role')).rejects.toThrow();
     });
+  });
+
+  it('should return an account on success', async () => {
+    const { sut } = makeSut();
+    const account = await sut.load('any_token', 'any_role');
+
+    expect(account).toEqual(mockAccount());
   });
 });

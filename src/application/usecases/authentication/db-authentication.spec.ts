@@ -49,7 +49,6 @@ describe('DbAuthenticationUseCase', () => {
         loadAccountByEmailRepositorySpy,
         'loadByEmail',
       );
-
       await sut.auth(mockAuthenticationParams());
 
       expect(loadSpy).toHaveBeenCalledWith(mockAuthenticationParams().email);
@@ -59,7 +58,7 @@ describe('DbAuthenticationUseCase', () => {
       const { sut, loadAccountByEmailRepositorySpy } = makeSut();
       jest
         .spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail')
-        .mockImplementationOnce(throwError);
+        .mockRejectedValueOnce(throwError);
 
       await expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
@@ -68,8 +67,7 @@ describe('DbAuthenticationUseCase', () => {
       const { sut, loadAccountByEmailRepositorySpy } = makeSut();
       jest
         .spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail')
-        .mockReturnValueOnce(null);
-
+        .mockResolvedValueOnce(null);
       const accessToken = await sut.auth(mockAuthenticationParams());
 
       expect(accessToken).toBe(null);
@@ -80,7 +78,6 @@ describe('DbAuthenticationUseCase', () => {
     it('should call HashComparer with correct values', async () => {
       const { sut, hashComparerSpy } = makeSut();
       const compareSpy = jest.spyOn(hashComparerSpy, 'compare');
-
       await sut.auth(mockAuthenticationParams());
 
       expect(compareSpy).toHaveBeenCalledWith(
@@ -91,17 +88,14 @@ describe('DbAuthenticationUseCase', () => {
 
     it('should throw if HashComparer throws', async () => {
       const { sut, hashComparerSpy } = makeSut();
-      jest.spyOn(hashComparerSpy, 'compare').mockImplementationOnce(throwError);
+      jest.spyOn(hashComparerSpy, 'compare').mockRejectedValueOnce(throwError);
 
       await expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
 
     it('should return null if HashComparer returns false', async () => {
       const { sut, hashComparerSpy } = makeSut();
-      jest
-        .spyOn(hashComparerSpy, 'compare')
-        .mockReturnValueOnce(Promise.resolve(false));
-
+      jest.spyOn(hashComparerSpy, 'compare').mockResolvedValueOnce(false);
       const accessToken = await sut.auth(mockAuthenticationParams());
 
       expect(accessToken).toBe(null);
@@ -112,7 +106,6 @@ describe('DbAuthenticationUseCase', () => {
     it('should call Encrypter with correct id', async () => {
       const { sut, encrypterSpy } = makeSut();
       const encryptSpy = jest.spyOn(encrypterSpy, 'encrypt');
-
       await sut.auth(mockAuthenticationParams());
 
       expect(encryptSpy).toHaveBeenCalledWith(mockAccount().id);
@@ -120,16 +113,9 @@ describe('DbAuthenticationUseCase', () => {
 
     it('should throw if Encrypter throws', async () => {
       const { sut, encrypterSpy } = makeSut();
-      jest.spyOn(encrypterSpy, 'encrypt').mockImplementationOnce(throwError);
+      jest.spyOn(encrypterSpy, 'encrypt').mockRejectedValueOnce(throwError);
 
       await expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
-    });
-
-    it('should return a token on success', async () => {
-      const { sut } = makeSut();
-      const accessToken = await sut.auth(mockAuthenticationParams());
-
-      expect(accessToken).toBe('any_token');
     });
   });
 
@@ -140,7 +126,6 @@ describe('DbAuthenticationUseCase', () => {
         updateAccessTokenRepositoryStub,
         'updateAccessToken',
       );
-
       await sut.auth(mockAuthenticationParams());
 
       expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token');
@@ -150,9 +135,16 @@ describe('DbAuthenticationUseCase', () => {
       const { sut, updateAccessTokenRepositoryStub } = makeSut();
       jest
         .spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken')
-        .mockImplementationOnce(throwError);
+        .mockRejectedValueOnce(throwError);
 
       await expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
+  });
+
+  it('should return a token on success', async () => {
+    const { sut } = makeSut();
+    const accessToken = await sut.auth(mockAuthenticationParams());
+
+    expect(accessToken).toBe('any_token');
   });
 });

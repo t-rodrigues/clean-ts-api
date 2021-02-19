@@ -37,7 +37,7 @@ describe('DbSaveSurveyResult Usecase', () => {
     const { sut, saveSurveyResultRepositorySpy } = makeSut();
     jest
       .spyOn(saveSurveyResultRepositorySpy, 'save')
-      .mockImplementationOnce(throwError);
+      .mockRejectedValueOnce(throwError);
 
     await expect(sut.save(mockSaveSurveyResultParams())).rejects.toThrow();
   });
