@@ -7,7 +7,7 @@ export const swaggerConfig = {
   info: {
     title: 'Clean-TS-API',
     description:
-      'API do curso do Manguinho, projeto para realizar enquetes entre programadores',
+      'Essa é a documentação da API feita pelo instrutor Rodrigo Manguinho no curso da Udemy de NodeJs usando Typescript, TDD, Clean Architecture e seguindo os princípios do SOLID e Design Patterns.',
     version: '1.0.0',
     contact: {
       name: 'Thiago Rodrigues',
@@ -22,19 +22,16 @@ export const swaggerConfig = {
   servers: [
     {
       url: '/api',
+      description: 'Servidor principal',
     },
   ],
   tags: [
     {
-      name: 'login',
+      name: 'Login',
       description: 'APIs relacionadas a Login',
     },
     {
-      name: 'signup',
-      description: 'description',
-    },
-    {
-      name: 'surveys',
+      name: 'Enquete',
       description: 'APIs relacionadas a Enquete',
     },
   ],

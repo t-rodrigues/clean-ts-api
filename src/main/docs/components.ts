@@ -1,14 +1,17 @@
 import {
   badRequest,
-  notFound,
   serverError,
   unauthorized,
   forbidden,
 } from './components/';
 
 export const components = {
+  securitySchemes: {
+    apiKeyAuth: {
+      $ref: '#/schemas/apiKeyAuth',
+    },
+  },
   badRequest,
-  notFound,
   forbidden,
   unauthorized,
   serverError,
