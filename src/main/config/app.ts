@@ -4,6 +4,7 @@ import { setupRoutes } from './routes';
 import { setupSwagger } from './swagger';
 
 const app = express();
+
 setupSwagger(app);
 setupMiddlewares(app);
 setupRoutes(app);
