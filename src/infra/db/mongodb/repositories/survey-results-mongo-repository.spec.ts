@@ -1,4 +1,4 @@
-import { Collection } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { DbSurvey } from '@/application/dtos';
 import { MongoHelper } from '@/infra/db/mongodb';
 
@@ -62,15 +62,16 @@ describe('SurveysMongoRepository', () => {
       });
 
       expect(surveyResult).toBeTruthy();
-      expect(surveyResult).toHaveProperty('id');
-      expect(surveyResult.answer).toBe(survey.answers[0].answer);
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(1);
+      expect(surveyResult.answers[0].percent).toBe(100);
     });
 
     it('should update a survey result if its not new', async () => {
       const survey = await mockSurvey();
       const accountId = await mockAccountId();
-      const res = await surveyResultCollection.insertOne({
-        surveyId: survey.id,
+      await surveyResultCollection.insertOne({
+        surveyId: new ObjectId(survey.id),
         accountId,
         answer: survey.answers[0].answer,
         date: new Date(),
@@ -84,9 +85,10 @@ describe('SurveysMongoRepository', () => {
       });
 
       expect(surveyResult).toBeTruthy();
-      expect(surveyResult).toHaveProperty('id');
-      expect(surveyResult.answer).toBe(survey.answers[1].answer);
-      expect(surveyResult.id).toEqual(res.ops[0]._id);
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer);
+      expect(surveyResult.answers[0].count).toBe(1);
+      expect(surveyResult.answers[0].percent).toBe(100);
     });
   });
 });
