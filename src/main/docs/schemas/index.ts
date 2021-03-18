@@ -8,4 +8,5 @@ export * from './signup-params';
 export * from './survey';
 export * from './survey-answer';
 export * from './survey-result';
+export * from './survey-result-answer';
 export * from './surveys';

@@ -9,6 +9,7 @@ import {
   surveySchema,
   surveyAnswerSchema,
   surveyResultSchema,
+  surveyResultAnswerSchema,
   surveysSchema,
 } from './schemas/';
 
@@ -23,5 +24,6 @@ export const schemas = {
   survey: surveySchema,
   surveyAnswer: surveyAnswerSchema,
   surveyResult: surveyResultSchema,
+  surveyResultAnswer: surveyResultAnswerSchema,
   surveys: surveysSchema,
 };

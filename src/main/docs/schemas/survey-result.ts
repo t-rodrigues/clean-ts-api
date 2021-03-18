@@ -4,15 +4,18 @@ export const surveyResultSchema = {
     surveyId: {
       type: 'string',
     },
-    accountId: {
+    question: {
       type: 'string',
     },
-    answer: {
-      type: 'string',
+    answers: {
+      type: 'array',
+      items: {
+        $ref: '#/schemas/surveyResultAnswer',
+      },
     },
     date: {
       type: 'string',
     },
   },
-  required: ['surveyId', 'accountId', 'answer', 'date'],
+  required: ['surveyId', 'question', 'asnwers', 'date'],
 };
