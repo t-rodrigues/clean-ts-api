@@ -35,6 +35,10 @@ export class SurveyResultsMongoRepository
 
   async loadBySurveyId(surveyId: string): Promise<SurveyResult> {
     const surveysCollection = await MongoHelper.getCollection('surveys');
+    const isValid = ObjectId.isValid(surveyId);
+    if (!isValid) {
+      return null;
+    }
     const query = new QueryBuilder()
       .match({
         _id: new ObjectId(surveyId),
@@ -119,6 +123,6 @@ export class SurveyResultsMongoRepository
 
     const surveyResult = await surveysCollection.aggregate(query).toArray();
 
-    return surveyResult?.length ? surveyResult[0] : null;
+    return surveyResult[0];
   }
 }

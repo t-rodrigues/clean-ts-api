@@ -141,6 +141,15 @@ describe('SurveysMongoRepository', () => {
       expect(surveyResult.answers[2].percent).toBe(0);
     });
 
+    it('should load survey result returns null when surveyId is invalid', async () => {
+      const survey = await mockSurvey();
+      const sut = makeSut();
+      const surveyResult = await sut.loadBySurveyId('any_survey_is');
+
+      expect(survey).toBeTruthy();
+      expect(surveyResult).toBeNull();
+    });
+
     it('should load survey result when answers were not registered', async () => {
       const survey = await mockSurvey();
       const sut = makeSut();
