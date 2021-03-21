@@ -1,4 +1,6 @@
 import { HttpRequest } from '@/presentation/contracts';
+import { InvalidParamError } from '@/presentation/errors';
+import { forbidden } from '@/presentation/helpers';
 import { LoadSurveyResultSpy } from '@/presentation/test/mocks';
 
 import { LoadSurveyResultController } from './load-survey-result-controller';
@@ -32,5 +34,14 @@ describe('LoadSurveyResultController', () => {
     await sut.handle(makeFakeRequest());
 
     expect(loadSpy).toHaveBeenCalledWith(makeFakeRequest().params.surveyId);
+  });
+
+  it('should return 403 if LoadSurveyResult returns null', async () => {
+    const { sut, loadSurveyResultSpy } = makeSut();
+    jest.spyOn(loadSurveyResultSpy, 'load').mockReturnValueOnce(null);
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 });
