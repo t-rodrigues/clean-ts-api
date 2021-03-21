@@ -80,8 +80,6 @@ describe('SurveysRoutes', () => {
       const accessToken = await makeAccessToken();
       const survey = await makeSurvey();
 
-      console.log(accessToken, survey);
-
       await request(app)
         .put(`/api/surveys/${survey.id}/results`)
         .set('x-access-token', accessToken)
@@ -93,6 +91,16 @@ describe('SurveysRoutes', () => {
   describe('GET /surveys/:surveyId/results', () => {
     it('should return 403 on load survey result without accessToken', async () => {
       await request(app).get('/api/surveys/any_id/results').expect(403);
+    });
+
+    it('should return 200 on load survey result with valid data', async () => {
+      const accessToken = await makeAccessToken();
+      const survey = await makeSurvey();
+
+      await request(app)
+        .get(`/api/surveys/${survey.id}/results`)
+        .set('x-access-token', accessToken)
+        .expect(200);
     });
   });
 });
