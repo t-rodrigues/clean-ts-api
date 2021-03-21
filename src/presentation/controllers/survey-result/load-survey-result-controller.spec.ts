@@ -1,6 +1,7 @@
+import { throwError } from '@/domain/test/mocks';
 import { HttpRequest } from '@/presentation/contracts';
 import { InvalidParamError } from '@/presentation/errors';
-import { forbidden } from '@/presentation/helpers';
+import { forbidden, serverError } from '@/presentation/helpers';
 import { LoadSurveyResultSpy } from '@/presentation/test/mocks';
 
 import { LoadSurveyResultController } from './load-survey-result-controller';
@@ -43,5 +44,14 @@ describe('LoadSurveyResultController', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
+  });
+
+  it('should return 500 if LoadSurveyResult throws', async () => {
+    const { sut, loadSurveyResultSpy } = makeSut();
+    jest.spyOn(loadSurveyResultSpy, 'load').mockImplementationOnce(throwError);
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
