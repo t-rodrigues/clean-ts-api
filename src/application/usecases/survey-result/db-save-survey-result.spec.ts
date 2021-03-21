@@ -1,6 +1,6 @@
 import { SaveSurveyResultRepositorySpy } from '@/application/test/mocks';
 import {
-  mockSaveSurveyResult,
+  mockSurveyResult,
   mockSaveSurveyResultParams,
   throwError,
 } from '@/domain/test/mocks';
@@ -46,6 +46,6 @@ describe('DbSaveSurveyResult Usecase', () => {
     const { sut } = makeSut();
     const saveResult = await sut.save(mockSaveSurveyResultParams());
 
-    expect(saveResult).toEqual(mockSaveSurveyResult());
+    expect(saveResult).toEqual(mockSurveyResult());
   });
 });

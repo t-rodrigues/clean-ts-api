@@ -3,10 +3,10 @@ import { DbSurvey } from '@/application/dtos';
 import { MongoHelper } from '@/infra/db/mongodb';
 
 import { mockAddSurveyParams } from '@/domain/test/mocks';
-import { SaveSurveyResultMongoRepository } from './survey-results-mongo-repository';
+import { SurveyResultsMongoRepository } from './survey-results-mongo-repository';
 
-const makeSut = (): SaveSurveyResultMongoRepository => {
-  return new SaveSurveyResultMongoRepository();
+const makeSut = (): SurveyResultsMongoRepository => {
+  return new SurveyResultsMongoRepository();
 };
 
 const mockSurvey = async (): Promise<DbSurvey> => {

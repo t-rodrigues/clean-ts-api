@@ -3,7 +3,7 @@ import { InvalidParamError } from '@/presentation/errors';
 import { forbidden, ok, serverError } from '@/presentation/helpers';
 
 import {
-  mockSaveSurveyResult,
+  mockSurveyResult,
   mockSaveSurveyResultParams,
   throwError,
 } from '@/domain/test/mocks';
@@ -122,6 +122,6 @@ describe('SaveSurveyResultController', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(ok(mockSaveSurveyResult()));
+    expect(httpResponse).toEqual(ok(mockSurveyResult()));
   });
 });

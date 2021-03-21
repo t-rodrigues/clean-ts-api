@@ -6,7 +6,7 @@ import { MongoHelper } from '../mongo-helper';
 import { SurveyResult } from '@/domain/entities';
 import { QueryBuilder } from '../query-builder';
 
-export class SaveSurveyResultMongoRepository
+export class SurveyResultsMongoRepository
   implements SaveSurveyResultRepository {
   async save(
     saveSurveyData: DbSaveSurveyResultParams,
