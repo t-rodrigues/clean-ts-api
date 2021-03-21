@@ -49,4 +49,43 @@ export const surveyResultPath = {
       },
     },
   },
+  get: {
+    security: [
+      {
+        apiKeyAuth: [],
+      },
+    ],
+    tags: ['Enquete'],
+    summary: 'API para consultar o resultado de uma enquete',
+    description: 'Essa rota só pode ser executada por `usuários autenticados`',
+    parameters: [
+      {
+        name: 'surveyId',
+        in: 'path',
+        description: 'ID da enquete a ser carregada',
+        required: true,
+        schema: {
+          format: 'uuid',
+        },
+      },
+    ],
+    responses: {
+      200: {
+        description: 'Sucesso',
+        content: {
+          'applicaiton/json': {
+            schema: {
+              $ref: '#/schemas/surveyResult',
+            },
+          },
+        },
+      },
+      403: {
+        $ref: '#/components/forbidden',
+      },
+      500: {
+        $ref: '#/components/serverError',
+      },
+    },
+  },
 };
