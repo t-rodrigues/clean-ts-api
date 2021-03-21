@@ -5,7 +5,7 @@ import {
   HttpResponse,
 } from '@/presentation/contracts';
 import { InvalidParamError } from '@/presentation/errors';
-import { forbidden, serverError } from '@/presentation/helpers';
+import { forbidden, ok, serverError } from '@/presentation/helpers';
 
 export class LoadSurveyResultController implements Controller {
   constructor(private readonly loadSurveyResult: LoadSurveyResult) {}
@@ -19,7 +19,7 @@ export class LoadSurveyResultController implements Controller {
         return forbidden(new InvalidParamError('surveyId'));
       }
 
-      return null;
+      return ok(surveyResult);
     } catch (error) {
       return serverError(error);
     }
