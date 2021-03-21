@@ -130,6 +130,7 @@ describe('SurveysMongoRepository', () => {
       ]);
       const sut = makeSut();
       const surveyResult = await sut.loadBySurveyId(survey.id);
+
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
       expect(surveyResult.answers[0].count).toBe(2);
@@ -138,6 +139,21 @@ describe('SurveysMongoRepository', () => {
       expect(surveyResult.answers[1].percent).toBe(50);
       expect(surveyResult.answers[2].count).toBe(0);
       expect(surveyResult.answers[2].percent).toBe(0);
+    });
+
+    it('should load survey result when answers were not registered', async () => {
+      const survey = await mockSurvey();
+      const sut = makeSut();
+      const surveyResult = await sut.loadBySurveyId(survey.id);
+
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(0);
+      expect(surveyResult.answers[0].percent).toBe(0);
+      expect(surveyResult.answers[0].count).toBe(0);
+      expect(surveyResult.answers[0].percent).toBe(0);
+      expect(surveyResult.answers[0].count).toBe(0);
+      expect(surveyResult.answers[0].percent).toBe(0);
     });
   });
 });
