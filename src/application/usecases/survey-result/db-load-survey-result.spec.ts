@@ -21,6 +21,8 @@ const makeSut = (): SutTypes => {
   };
 };
 
+jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 17, 8));
+
 describe('DbLoadSurveyResult UseCase', () => {
   it('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositorySpy } = makeSut();

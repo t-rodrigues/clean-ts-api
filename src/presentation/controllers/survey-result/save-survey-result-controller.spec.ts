@@ -40,7 +40,7 @@ const makeFakeRequest = (): HttpRequest => ({
     surveyId: 'any_survey_id',
   },
   body: {
-    answer: 'any_answer',
+    answer: 'any_answer_1',
   },
 });
 

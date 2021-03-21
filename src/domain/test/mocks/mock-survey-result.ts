@@ -4,7 +4,7 @@ import { SaveSurveyResultParams } from '@/domain/usecases';
 export const mockSaveSurveyResultParams = (): SaveSurveyResultParams => ({
   surveyId: 'any_survey_id',
   accountId: 'any_account_id',
-  answer: 'any_answer',
+  answer: 'any_answer_1',
   date: new Date(),
 });
 
