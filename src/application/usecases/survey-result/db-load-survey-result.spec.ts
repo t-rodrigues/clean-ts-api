@@ -1,5 +1,9 @@
 import { LoadSurveyResultRepositorySpy } from '@/application/test/mocks';
-import { mockLoadSurveyResultParams, throwError } from '@/domain/test/mocks';
+import {
+  mockLoadSurveyResultParams,
+  mockSurveyResult,
+  throwError,
+} from '@/domain/test/mocks';
 
 import { DbLoadSurveyResult } from './db-load-survey-result';
 
@@ -39,5 +43,13 @@ describe('DbLoadSurveyResult UseCase', () => {
       .mockRejectedValueOnce(throwError);
 
     await expect(sut.load(mockLoadSurveyResultParams())).rejects.toThrow();
+  });
+
+  it('should return survey result on success', async () => {
+    const { sut } = makeSut();
+
+    const surveyResult = await sut.load(mockLoadSurveyResultParams());
+
+    expect(surveyResult).toEqual(mockSurveyResult());
   });
 });
