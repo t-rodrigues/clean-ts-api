@@ -1,5 +1,5 @@
 import { LoadSurveyResultRepositorySpy } from '@/application/test/mocks';
-import { mockLoadSurveyResultParams } from '@/domain/test/mocks';
+import { mockLoadSurveyResultParams, throwError } from '@/domain/test/mocks';
 
 import { DbLoadSurveyResult } from './db-load-survey-result';
 
@@ -30,5 +30,14 @@ describe('DbLoadSurveyResult UseCase', () => {
     expect(loadBySurveyIdSpy).toHaveBeenCalledWith(
       mockLoadSurveyResultParams(),
     );
+  });
+
+  it('should throw if LoadSurveyResultRepository throws', async () => {
+    const { sut, loadSurveyResultRepositorySpy } = makeSut();
+    jest
+      .spyOn(loadSurveyResultRepositorySpy, 'loadBySurveyId')
+      .mockRejectedValueOnce(throwError);
+
+    await expect(sut.load(mockLoadSurveyResultParams())).rejects.toThrow();
   });
 });
