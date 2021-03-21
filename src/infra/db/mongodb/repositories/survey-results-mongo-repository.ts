@@ -1,24 +1,18 @@
 import { ObjectId } from 'mongodb';
 
 import {
-  LoadSurveysRepository,
+  LoadSurveyResultRepository,
   SaveSurveyResultRepository,
 } from '@/application/contracts';
-import { DbSurveyResult, DbSaveSurveyResultParams } from '@/application/dtos';
-import { Survey, SurveyResult } from '@/domain/entities';
+import { DbSaveSurveyResultParams } from '@/application/dtos';
+import { SurveyResult } from '@/domain/entities';
 
 import { MongoHelper } from '../mongo-helper';
 import { QueryBuilder } from '../query-builder';
 
 export class SurveyResultsMongoRepository
-  implements SaveSurveyResultRepository, LoadSurveysRepository {
-  loadAll(): Promise<Survey[]> {
-    throw new Error('Method not implemented.');
-  }
-
-  async save(
-    saveSurveyData: DbSaveSurveyResultParams,
-  ): Promise<DbSurveyResult> {
+  implements SaveSurveyResultRepository, LoadSurveyResultRepository {
+  async save(saveSurveyData: DbSaveSurveyResultParams): Promise<void> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults',
     );
@@ -37,8 +31,6 @@ export class SurveyResultsMongoRepository
         upsert: true,
       },
     );
-
-    return this.loadBySurveyId(saveSurveyData.surveyId);
   }
 
   async loadBySurveyId(surveyId: string): Promise<SurveyResult> {

@@ -1,4 +1,7 @@
-import { SaveSurveyResultRepositorySpy } from '@/application/test/mocks';
+import {
+  LoadSurveyResultRepositorySpy,
+  SaveSurveyResultRepositorySpy,
+} from '@/application/test/mocks';
 import {
   mockSurveyResult,
   mockSaveSurveyResultParams,
@@ -10,15 +13,21 @@ import { DbSaveSurveyResult } from './db-save-survey-result';
 type SutTypes = {
   sut: DbSaveSurveyResult;
   saveSurveyResultRepositorySpy: SaveSurveyResultRepositorySpy;
+  loadSurveyResultRepositorySpy: LoadSurveyResultRepositorySpy;
 };
 
 const makeSut = (): SutTypes => {
   const saveSurveyResultRepositorySpy = new SaveSurveyResultRepositorySpy();
-  const sut = new DbSaveSurveyResult(saveSurveyResultRepositorySpy);
+  const loadSurveyResultRepositorySpy = new LoadSurveyResultRepositorySpy();
+  const sut = new DbSaveSurveyResult(
+    saveSurveyResultRepositorySpy,
+    loadSurveyResultRepositorySpy,
+  );
 
   return {
     sut,
     saveSurveyResultRepositorySpy,
+    loadSurveyResultRepositorySpy,
   };
 };
 
@@ -37,6 +46,28 @@ describe('DbSaveSurveyResult Usecase', () => {
     const { sut, saveSurveyResultRepositorySpy } = makeSut();
     jest
       .spyOn(saveSurveyResultRepositorySpy, 'save')
+      .mockRejectedValueOnce(throwError);
+
+    await expect(sut.save(mockSaveSurveyResultParams())).rejects.toThrow();
+  });
+
+  it('should call LoadSurveyResultRepository with correct values', async () => {
+    const { sut, loadSurveyResultRepositorySpy } = makeSut();
+    const loadBySurveyIdSpy = jest.spyOn(
+      loadSurveyResultRepositorySpy,
+      'loadBySurveyId',
+    );
+    await sut.save(mockSaveSurveyResultParams());
+
+    expect(loadBySurveyIdSpy).toHaveBeenCalledWith(
+      mockSaveSurveyResultParams().surveyId,
+    );
+  });
+
+  it('should throw if LoadSurveyResultRepository throws', async () => {
+    const { sut, loadSurveyResultRepositorySpy } = makeSut();
+    jest
+      .spyOn(loadSurveyResultRepositorySpy, 'loadBySurveyId')
       .mockRejectedValueOnce(throwError);
 
     await expect(sut.save(mockSaveSurveyResultParams())).rejects.toThrow();

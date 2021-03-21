@@ -9,9 +9,7 @@ import { mockSurveyResult } from '@/domain/test/mocks';
 
 export class SaveSurveyResultRepositorySpy
   implements SaveSurveyResultRepository {
-  async save(saveSurveyResult: SaveSurveyResultParams): Promise<SurveyResult> {
-    return mockSurveyResult();
-  }
+  async save(saveSurveyResult: SaveSurveyResultParams): Promise<void> {}
 }
 
 export class LoadSurveyResultRepositorySpy
