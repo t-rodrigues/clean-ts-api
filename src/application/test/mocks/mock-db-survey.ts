@@ -9,19 +9,31 @@ import { AddSurveyParams } from '@/domain/usecases';
 import { mockSurvey, mockSurveys } from '@/domain/test/mocks';
 
 export class AddSurveyRepositorySpy implements AddSurveyRepository {
-  async add(addSurveyDTO: AddSurveyParams): Promise<void> {
-    return null;
+  addSurveyParams: AddSurveyParams;
+
+  async add(data: AddSurveyParams): Promise<void> {
+    this.addSurveyParams = data;
   }
 }
 
 export class LoadSurveyByIdRepositorySpy implements LoadSurveyByIdRepository {
+  survey = mockSurvey();
+  id: string;
+
   async loadById(id: string): Promise<Survey> {
-    return Promise.resolve(mockSurvey());
+    this.id = id;
+
+    return this.survey;
   }
 }
 
 export class LoadSurveysRepositorySpy implements LoadSurveysRepository {
+  surveys = mockSurveys();
+  count = 0;
+
   async loadAll(): Promise<Survey[]> {
-    return Promise.resolve(mockSurveys());
+    this.count++;
+
+    return this.surveys;
   }
 }

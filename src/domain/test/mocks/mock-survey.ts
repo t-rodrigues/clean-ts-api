@@ -1,26 +1,35 @@
+import faker from 'faker';
+
 import { Survey } from '@/domain/entities';
 import { AddSurveyParams } from '@/domain/usecases';
 
 export const mockAddSurveyParams = (): AddSurveyParams => ({
-  question: 'any_question',
+  question: faker.random.words(),
   answers: [
     {
-      image: 'any_image_1',
-      answer: 'any_answer_1',
+      image: faker.image.imageUrl(),
+      answer: faker.random.word(),
     },
     {
-      image: 'any_image_2',
-      answer: 'any_answer_2',
-    },
-    {
-      image: 'any_image_3',
-      answer: 'any_answer_3',
+      answer: faker.random.word(),
     },
   ],
-  date: new Date(),
+  date: faker.date.recent(),
 });
 
-export const mockSurvey = (): Survey =>
-  Object.assign({}, { id: 'any_id' }, mockAddSurveyParams());
+export const mockSurvey = (): Survey => ({
+  id: faker.random.uuid(),
+  question: faker.random.words(),
+  answers: [
+    {
+      answer: faker.random.word(),
+    },
+    {
+      answer: faker.random.word(),
+      image: faker.image.imageUrl(),
+    },
+  ],
+  date: faker.date.recent(),
+});
 
 export const mockSurveys = (): Survey[] => [mockSurvey(), mockSurvey()];

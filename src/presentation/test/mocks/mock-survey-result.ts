@@ -8,13 +8,23 @@ import {
 import { mockSurveyResult } from '@/domain/test/mocks';
 
 export class SaveSurveyResultSpy implements SaveSurveyResult {
+  surveyResult = mockSurveyResult();
+  saveSurveyResult: SaveSurveyResultParams;
+
   async save(data: SaveSurveyResultParams): Promise<SurveyResult> {
-    return mockSurveyResult();
+    this.saveSurveyResult = data;
+
+    return this.surveyResult;
   }
 }
 
 export class LoadSurveyResultSpy implements LoadSurveyResult {
+  surveyResult = mockSurveyResult();
+  surveyId: string;
+
   async load(surveyId: string): Promise<SurveyResult> {
-    return mockSurveyResult();
+    this.surveyId = surveyId;
+
+    return this.surveyResult;
   }
 }

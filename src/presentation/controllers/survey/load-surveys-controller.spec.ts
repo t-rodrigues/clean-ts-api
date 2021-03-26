@@ -1,7 +1,6 @@
 import { noContent, ok, serverError } from '@/presentation/helpers';
-
-import { mockSurveys } from '@/domain/test/mocks';
 import { LoadSurveysSpy } from '@/presentation/test/mocks';
+
 import { LoadSurveysController } from './load-surveys-controller';
 
 type SutTypes = {
@@ -30,10 +29,10 @@ describe('LoadSurveysController', () => {
   });
 
   it('should return 200 on success', async () => {
-    const { sut } = makeSut();
+    const { sut, loadSurveysSpy } = makeSut();
     const httpResponse = await sut.handle({});
 
-    expect(httpResponse).toEqual(ok(mockSurveys()));
+    expect(httpResponse).toEqual(ok(loadSurveysSpy.surveys));
   });
 
   it('should return 204 if LoadSurveys returns empty', async () => {

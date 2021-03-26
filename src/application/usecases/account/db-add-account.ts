@@ -3,8 +3,9 @@ import {
   Hasher,
   LoadAccountByEmailRepository,
 } from '@/application/contracts';
-import { AddAccount, AddAccountParams } from '@/domain/usecases';
 import { Account } from '@/domain/entities';
+
+import { AddAccount, AddAccountParams } from '@/domain/usecases';
 
 export class DbAddAccount implements AddAccount {
   constructor(
@@ -13,18 +14,18 @@ export class DbAddAccount implements AddAccount {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
   ) {}
 
-  async add(accountData: AddAccountParams): Promise<Account> {
+  async add({ name, email, password }: AddAccountParams): Promise<Account> {
     const findAccount = await this.loadAccountByEmailRepository.loadByEmail(
-      accountData.email,
+      email,
     );
 
     if (findAccount) {
       return null;
     }
 
-    const hashedPassword = await this.hasher.hash(accountData.password);
+    const hashedPassword = await this.hasher.hash(password);
     const account = await this.addAccountRepository.add(
-      Object.assign({}, accountData, { password: hashedPassword }),
+      Object.assign({}, { name, email, password: hashedPassword }),
     );
 
     return account;

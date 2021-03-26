@@ -1,8 +1,11 @@
+import faker from 'faker';
+
 import {
   DecrypterSpy,
   LoadAccountByTokenRepositorySpy,
 } from '@/application/test/mocks';
-import { mockAccount, throwError } from '@/domain/test/mocks';
+import { throwError } from '@/domain/test/mocks';
+
 import { DbLoadAccountByToken } from './db-load-account-by-token';
 
 type SutTypes = {
@@ -26,20 +29,27 @@ const makeSut = (): SutTypes => {
   };
 };
 
+let token: string;
+let role: string;
+
 describe('DbLoadAccountByTokenUseCase', () => {
+  beforeEach(() => {
+    token = faker.random.uuid();
+    role = faker.random.word();
+  });
+
   describe('Decrypter', () => {
     it('should call Decrypter with correct values', async () => {
       const { sut, decrypterSpy } = makeSut();
-      const decryptSpy = jest.spyOn(decrypterSpy, 'decrypt');
-      await sut.load('any_token', 'any_role');
+      await sut.load(token, role);
 
-      expect(decryptSpy).toHaveBeenCalledWith('any_token');
+      expect(decrypterSpy.ciphertext).toBe(token);
     });
 
     it('should return null if Decrypter returns null', async () => {
       const { sut, decrypterSpy } = makeSut();
-      jest.spyOn(decrypterSpy, 'decrypt').mockResolvedValueOnce(null);
-      const account = await sut.load('any_token', 'any_role');
+      decrypterSpy.plaintext = null;
+      const account = await sut.load(token, role);
 
       expect(account).toBeNull();
     });
@@ -48,20 +58,17 @@ describe('DbLoadAccountByTokenUseCase', () => {
       const { sut, decrypterSpy } = makeSut();
       jest.spyOn(decrypterSpy, 'decrypt').mockRejectedValueOnce(throwError);
 
-      await expect(sut.load('any_token', 'any_role')).rejects.toThrow();
+      await expect(sut.load(token, role)).rejects.toThrow();
     });
   });
 
   describe('LoadAccountByTokenRepository', () => {
     it('should call LoadAccountByTokenRepository with correct values', async () => {
       const { sut, loadAccountByTokenRepositorySpy } = makeSut();
-      const loadByTokenSpy = jest.spyOn(
-        loadAccountByTokenRepositorySpy,
-        'loadByToken',
-      );
-      await sut.load('any_token', 'any_role');
+      await sut.load(token, role);
 
-      expect(loadByTokenSpy).toHaveBeenCalledWith('any_token', 'any_role');
+      expect(loadAccountByTokenRepositorySpy.token).toBe(token);
+      expect(loadAccountByTokenRepositorySpy.role).toBe(role);
     });
 
     it('should throw if LoadAccountByTokenRepository throws', async () => {
@@ -70,24 +77,22 @@ describe('DbLoadAccountByTokenUseCase', () => {
         .spyOn(loadAccountByTokenRepositorySpy, 'loadByToken')
         .mockRejectedValueOnce(throwError);
 
-      await expect(sut.load('any_token', 'any_role')).rejects.toThrow();
+      await expect(sut.load(token, role)).rejects.toThrow();
     });
 
     it('should return null if LoadAccountByTokenRepository returns null', async () => {
       const { sut, loadAccountByTokenRepositorySpy } = makeSut();
-      jest
-        .spyOn(loadAccountByTokenRepositorySpy, 'loadByToken')
-        .mockReturnValueOnce(null);
-      const reponse = await sut.load('any_token', 'any_role');
+      loadAccountByTokenRepositorySpy.account = null;
+      const account = await sut.load(token, role);
 
-      expect(reponse).toBeNull();
+      expect(account).toBeNull();
     });
   });
 
   it('should return an account on success', async () => {
-    const { sut } = makeSut();
-    const account = await sut.load('any_token', 'any_role');
+    const { sut, loadAccountByTokenRepositorySpy } = makeSut();
+    const account = await sut.load(token, role);
 
-    expect(account).toEqual(mockAccount());
+    expect(account).toEqual(loadAccountByTokenRepositorySpy.account);
   });
 });

@@ -29,41 +29,39 @@ describe('SurveysMongoRepository', () => {
       const sut = makeSut();
       await sut.add(mockAddSurveyParams());
 
-      const survey = await surveyCollection.findOne({
-        question: 'any_question',
-      });
-
-      expect(survey).toBeTruthy();
+      const count = await surveyCollection.countDocuments();
+      expect(count).toBe(1);
     });
   });
 
   describe('loadAll()', () => {
     it('should load all surveys on success', async () => {
-      await surveyCollection.insertOne(mockAddSurveyParams());
+      const addSurvey = [mockAddSurveyParams(), mockAddSurveyParams()];
+      await surveyCollection.insertMany(addSurvey);
 
       const sut = makeSut();
       const surveys = await sut.loadAll();
 
-      expect(surveys).toBeInstanceOf(Array);
+      expect(surveys.length).toBe(2);
       expect(surveys[0].id).toHaveProperty('id');
+      expect(surveys[0].question).toBe(addSurvey[0].question);
+      expect(surveys[1].id).toHaveProperty('id');
+      expect(surveys[1].question).toBe(addSurvey[1].question);
     });
 
     it('should load empty list', async () => {
-      await surveyCollection.insertOne(mockAddSurveyParams());
-
       const sut = makeSut();
       const surveys = await sut.loadAll();
 
-      expect(surveys).toBeInstanceOf(Array);
+      expect(surveys.length).toBe(0);
     });
   });
 
   describe('loadById()', () => {
     it('should load survey by id on success', async () => {
-      const res = await surveyCollection.insertOne(mockAddSurveyParams());
-      const { _id: id } = res.ops[0];
+      const response = await surveyCollection.insertOne(mockAddSurveyParams());
       const sut = makeSut();
-      const survey = await sut.loadById(id);
+      const survey = await sut.loadById(response.ops[0]._id);
 
       expect(survey).toBeTruthy();
       expect(survey).toHaveProperty('id');

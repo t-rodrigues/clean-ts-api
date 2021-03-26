@@ -9,19 +9,28 @@ import {
 import { mockSurvey, mockSurveys } from '@/domain/test/mocks';
 
 export class AddSurveySpy implements AddSurvey {
-  async add(surveyData: AddSurveyParams): Promise<void> {
-    return null;
+  addSurveyData: AddSurveyParams;
+
+  async add(data: AddSurveyParams): Promise<void> {
+    this.addSurveyData = data;
   }
 }
 
 export class LoadSurveyByIdSpy implements LoadSurveyById {
-  async loadById(id: string): Promise<Survey | null> {
-    return mockSurvey();
+  survey = mockSurvey();
+  surveyId: string;
+
+  async loadById(surveyId: string): Promise<Survey | null> {
+    this.surveyId = surveyId;
+
+    return this.survey;
   }
 }
 
 export class LoadSurveysSpy implements LoadSurveys {
+  surveys = mockSurveys();
+
   async load(): Promise<Survey[]> {
-    return mockSurveys();
+    return this.surveys;
   }
 }

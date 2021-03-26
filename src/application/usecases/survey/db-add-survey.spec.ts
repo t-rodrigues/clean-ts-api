@@ -22,10 +22,10 @@ jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 14, 8));
 describe('DbAddSurvey Usecase', () => {
   it('should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositorySpy } = makeSut();
-    const addSpy = jest.spyOn(addSurveyRepositorySpy, 'add');
-    await sut.add(mockAddSurveyParams());
+    const surveyData = mockAddSurveyParams();
+    await sut.add(surveyData);
 
-    expect(addSpy).toHaveBeenCalledWith(mockAddSurveyParams());
+    expect(addSurveyRepositorySpy.addSurveyParams).toEqual(surveyData);
   });
 
   it('should throw if AddSurveyRepository throws', async () => {

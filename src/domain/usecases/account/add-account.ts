@@ -1,7 +1,11 @@
 import { Account } from '@/domain/entities';
 
-export type AddAccountParams = Omit<Account, 'id'>;
+export type AddAccountParams = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 export interface AddAccount {
-  add(addAccountData: AddAccountParams): Promise<Account>;
+  add(accountData: AddAccountParams): Promise<Account>;
 }

@@ -9,12 +9,21 @@ import { mockSurveyResult } from '@/domain/test/mocks';
 
 export class SaveSurveyResultRepositorySpy
   implements SaveSurveyResultRepository {
-  async save(saveSurveyResult: SaveSurveyResultParams): Promise<void> {}
+  saveSurveyResultParams: SaveSurveyResultParams;
+
+  async save(data: SaveSurveyResultParams): Promise<void> {
+    this.saveSurveyResultParams = data;
+  }
 }
 
 export class LoadSurveyResultRepositorySpy
   implements LoadSurveyResultRepository {
+  surveyResult = mockSurveyResult();
+  surveyId: string;
+
   async loadBySurveyId(surveyId: string): Promise<SurveyResult> {
-    return mockSurveyResult();
+    this.surveyId = surveyId;
+
+    return this.surveyResult;
   }
 }

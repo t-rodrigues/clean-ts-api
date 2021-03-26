@@ -1,4 +1,6 @@
+import faker from 'faker';
 import { Collection } from 'mongodb';
+
 import { MongoHelper } from '@/infra/db/mongodb';
 
 import { LogsMongoRepository } from './logs-mongo-repository';
@@ -26,7 +28,7 @@ describe('LogsMongoRepository', () => {
   describe('logError()', () => {
     it('should create an error log on success', async () => {
       const sut = makeSut();
-      await sut.logError('any_stack');
+      await sut.logError(faker.random.words());
       const count = await logErrorCollection.countDocuments();
 
       expect(count).toBe(1);

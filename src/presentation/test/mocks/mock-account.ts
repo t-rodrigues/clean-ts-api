@@ -1,3 +1,5 @@
+import faker from 'faker';
+
 import {
   AddAccount,
   AddAccountParams,
@@ -10,19 +12,36 @@ import { Account } from '@/domain/entities';
 import { mockAccount } from '@/domain/test/mocks';
 
 export class AddAccountSpy implements AddAccount {
-  async add(account: AddAccountParams): Promise<Account> {
-    return mockAccount();
+  account = mockAccount();
+  accountData: AddAccountParams;
+
+  async add(data: AddAccountParams): Promise<Account> {
+    this.accountData = data;
+
+    return this.account;
   }
 }
 
 export class AuthenticationSpy implements Authentication {
-  async auth({ email, password }: AuthenticationParams): Promise<string> {
-    return 'token';
+  token = faker.random.uuid();
+  authParams: AuthenticationParams;
+
+  async auth(data: AuthenticationParams): Promise<string> {
+    this.authParams = data;
+
+    return this.token;
   }
 }
 
 export class LoadAccountByTokenSpy implements LoadAccountByToken {
+  account = mockAccount();
+  accessToken: string;
+  role: string;
+
   async load(accessToken: string, role?: string): Promise<Account | null> {
-    return mockAccount();
+    this.accessToken = accessToken;
+    this.role = role;
+
+    return this.account;
   }
 }

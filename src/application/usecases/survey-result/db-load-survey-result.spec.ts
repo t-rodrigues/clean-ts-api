@@ -1,9 +1,7 @@
+import faker from 'faker';
+
 import { LoadSurveyResultRepositorySpy } from '@/application/test/mocks';
-import {
-  mockLoadSurveyResultParams,
-  mockSurveyResult,
-  throwError,
-} from '@/domain/test/mocks';
+import { mockLoadSurveyResultParams, throwError } from '@/domain/test/mocks';
 
 import { DbLoadSurveyResult } from './db-load-survey-result';
 
@@ -23,19 +21,19 @@ const makeSut = (): SutTypes => {
 
 jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 17, 8));
 
+let surveyId: string;
+
 describe('DbLoadSurveyResult UseCase', () => {
+  beforeEach(() => {
+    surveyId = faker.random.uuid();
+  });
+
   it('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositorySpy } = makeSut();
-    const loadBySurveyIdSpy = jest.spyOn(
-      loadSurveyResultRepositorySpy,
-      'loadBySurveyId',
-    );
 
-    await sut.load(mockLoadSurveyResultParams());
+    await sut.load(surveyId);
 
-    expect(loadBySurveyIdSpy).toHaveBeenCalledWith(
-      mockLoadSurveyResultParams(),
-    );
+    expect(loadSurveyResultRepositorySpy.surveyId).toBe(surveyId);
   });
 
   it('should throw if LoadSurveyResultRepository throws', async () => {
@@ -48,10 +46,10 @@ describe('DbLoadSurveyResult UseCase', () => {
   });
 
   it('should return survey result on success', async () => {
-    const { sut } = makeSut();
+    const { sut, loadSurveyResultRepositorySpy } = makeSut();
 
     const surveyResult = await sut.load(mockLoadSurveyResultParams());
 
-    expect(surveyResult).toEqual(mockSurveyResult());
+    expect(surveyResult).toEqual(loadSurveyResultRepositorySpy.surveyResult);
   });
 });

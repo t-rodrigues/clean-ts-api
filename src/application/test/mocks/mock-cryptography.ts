@@ -1,3 +1,5 @@
+import faker from 'faker';
+
 import {
   Hasher,
   Decrypter,
@@ -6,25 +8,47 @@ import {
 } from '@/application/contracts';
 
 export class HasherSpy implements Hasher {
+  digest = faker.random.uuid();
+  payload: string;
+
   async hash(payload: string): Promise<string> {
-    return 'hashed_password';
+    this.payload = payload;
+
+    return this.digest;
   }
 }
 
 export class HashComparerSpy implements HashComparer {
-  async compare(password: string, hashedPassword: string): Promise<boolean> {
-    return true;
+  plaintext: string;
+  digest: string;
+  isValid = true;
+
+  async compare(plaintext: string, digest: string): Promise<boolean> {
+    this.plaintext = plaintext;
+    this.digest = digest;
+
+    return this.isValid;
   }
 }
 
 export class EncrypterSpy implements Encrypter {
-  async encrypt(payload: string): Promise<string> {
-    return 'any_token';
+  ciphertext = faker.random.uuid();
+  plaintext: string;
+
+  async encrypt(plaintext: string): Promise<string> {
+    this.plaintext = plaintext;
+
+    return this.ciphertext;
   }
 }
 
 export class DecrypterSpy implements Decrypter {
-  async decrypt(payload: string): Promise<string> {
-    return 'any_value';
+  ciphertext: string;
+  plaintext = faker.internet.password();
+
+  async decrypt(ciphertext: string): Promise<string> {
+    this.ciphertext = ciphertext;
+
+    return this.plaintext;
   }
 }
