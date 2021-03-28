@@ -8,4 +8,5 @@ export type Survey = {
   question: string;
   answers: SurveyAnswer[];
   date: Date;
+  didAnswer?: boolean;
 };

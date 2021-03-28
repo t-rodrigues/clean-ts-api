@@ -1,5 +1,5 @@
 import { Survey } from '@/domain/entities';
 
 export interface LoadSurveys {
-  load(): Promise<Survey[]>;
+  load(accountId: string): Promise<Survey[]>;
 }

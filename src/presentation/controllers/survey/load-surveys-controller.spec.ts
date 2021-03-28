@@ -1,3 +1,5 @@
+import faker from 'faker';
+import { HttpRequest } from '@/presentation/contracts';
 import { noContent, ok, serverError } from '@/presentation/helpers';
 import { LoadSurveysSpy } from '@/presentation/test/mocks';
 
@@ -18,19 +20,24 @@ const makeSut = (): SutTypes => {
   };
 };
 
+const mockRequest = (): HttpRequest => ({
+  accountId: faker.random.uuid(),
+});
+
 jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 12, 8));
 
 describe('LoadSurveysController', () => {
-  it('should call LoadSurveys', async () => {
+  it('should call LoadSurveys with correct value', async () => {
     const { sut, loadSurveysSpy } = makeSut();
-    const loadSpy = jest.spyOn(loadSurveysSpy, 'load');
-    await sut.handle({});
-    expect(loadSpy).toHaveBeenCalled();
+    const httpRequest = mockRequest();
+    await sut.handle(httpRequest);
+
+    expect(httpRequest.accountId).toBe(loadSurveysSpy.accountId);
   });
 
   it('should return 200 on success', async () => {
     const { sut, loadSurveysSpy } = makeSut();
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(ok(loadSurveysSpy.surveys));
   });
@@ -39,7 +46,7 @@ describe('LoadSurveysController', () => {
     const { sut, loadSurveysSpy } = makeSut();
     jest.spyOn(loadSurveysSpy, 'load').mockReturnValueOnce(Promise.resolve([]));
 
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(noContent());
   });
@@ -50,7 +57,7 @@ describe('LoadSurveysController', () => {
       .spyOn(loadSurveysSpy, 'load')
       .mockReturnValueOnce(Promise.reject(new Error()));
 
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
   });

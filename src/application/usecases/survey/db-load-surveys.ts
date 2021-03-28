@@ -5,8 +5,8 @@ import { LoadSurveys } from '@/domain/usecases';
 export class DbLoadSurveys implements LoadSurveys {
   constructor(private readonly loadSurveysRepository: LoadSurveysRepository) {}
 
-  async load(): Promise<Survey[]> {
-    const surveys = await this.loadSurveysRepository.loadAll();
+  async load(accountId: string): Promise<Survey[]> {
+    const surveys = await this.loadSurveysRepository.loadAll(accountId);
 
     return surveys;
   }
