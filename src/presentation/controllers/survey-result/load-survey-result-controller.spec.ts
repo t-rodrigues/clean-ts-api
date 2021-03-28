@@ -24,6 +24,7 @@ const makeSut = (): SutTypes => {
 };
 
 const mockRequest = (): HttpRequest => ({
+  accountId: faker.random.uuid(),
   params: {
     surveyId: faker.random.uuid(),
   },
@@ -32,13 +33,14 @@ const mockRequest = (): HttpRequest => ({
 jest.useFakeTimers('modern').setSystemTime(new Date(2021, 1, 17, 8));
 
 describe('LoadSurveyResultController', () => {
-  it('should call LoadSurveyResult with correct value', async () => {
+  it('should call LoadSurveyResult with correct values', async () => {
     const { sut, loadSurveyResultSpy } = makeSut();
     const httpRequest = mockRequest();
 
     await sut.handle(httpRequest);
 
     expect(loadSurveyResultSpy.surveyId).toBe(httpRequest.params.surveyId);
+    expect(loadSurveyResultSpy.accountId).toBe(httpRequest.accountId);
   });
 
   it('should return 403 if LoadSurveyResult returns null', async () => {

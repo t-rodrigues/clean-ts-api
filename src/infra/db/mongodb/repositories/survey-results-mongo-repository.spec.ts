@@ -102,6 +102,7 @@ describe('SurveysMongoRepository', () => {
     it('should load survey result', async () => {
       const survey = await mockSurvey();
       const accountId = await mockAccountId();
+      const accountId2 = await mockAccountId();
       await surveyResultCollection.insertMany([
         {
           surveyId: new ObjectId(survey.id),
@@ -111,13 +112,13 @@ describe('SurveysMongoRepository', () => {
         },
         {
           surveyId: new ObjectId(survey.id),
-          accountId: new ObjectId(accountId),
+          accountId: new ObjectId(accountId2),
           answer: survey.answers[0].answer,
           date: new Date(),
         },
       ]);
       const sut = makeSut();
-      const surveyResult = await sut.loadBySurveyId(survey.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId);
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
@@ -127,24 +128,97 @@ describe('SurveysMongoRepository', () => {
       expect(surveyResult.answers[1].percent).toBe(0);
     });
 
-    it('should loadBySurveyId returns null when surveyId is invalid', async () => {
+    it('should load survey result 2', async () => {
+      const survey = await mockSurvey();
+      const accountId = await mockAccountId();
+      const accountId2 = await mockAccountId();
+      const accountId3 = await mockAccountId();
+      await surveyResultCollection.insertMany([
+        {
+          surveyId: new ObjectId(survey.id),
+          accountId: new ObjectId(accountId),
+          answer: survey.answers[0].answer,
+          date: new Date(),
+        },
+        {
+          surveyId: new ObjectId(survey.id),
+          accountId: new ObjectId(accountId2),
+          answer: survey.answers[1].answer,
+          date: new Date(),
+        },
+        {
+          surveyId: new ObjectId(survey.id),
+          accountId: new ObjectId(accountId3),
+          answer: survey.answers[1].answer,
+          date: new Date(),
+        },
+      ]);
       const sut = makeSut();
-      const surveyResult = await sut.loadBySurveyId('invalid_survey_id');
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2);
+
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(2);
+      expect(surveyResult.answers[0].percent).toBe(67);
+      expect(surveyResult.answers[1].count).toBe(1);
+      expect(surveyResult.answers[1].percent).toBe(33);
+    });
+
+    it('should load survey result 3', async () => {
+      const survey = await mockSurvey();
+      const accountId = await mockAccountId();
+      const accountId2 = await mockAccountId();
+      const accountId3 = await mockAccountId();
+      await surveyResultCollection.insertMany([
+        {
+          surveyId: new ObjectId(survey.id),
+          accountId: new ObjectId(accountId),
+          answer: survey.answers[0].answer,
+          date: new Date(),
+        },
+        {
+          surveyId: new ObjectId(survey.id),
+          accountId: new ObjectId(accountId2),
+          answer: survey.answers[1].answer,
+          date: new Date(),
+        },
+      ]);
+      const sut = makeSut();
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId3);
+
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(1);
+      expect(surveyResult.answers[0].percent).toBe(50);
+      expect(surveyResult.answers[1].count).toBe(1);
+      expect(surveyResult.answers[1].percent).toBe(50);
+    });
+
+    it('should loadBySurveyId returns null when surveyId is invalid', async () => {
+      const accountId = await mockAccountId();
+      const sut = makeSut();
+      const surveyResult = await sut.loadBySurveyId(
+        'invalid_survey_id',
+        accountId,
+      );
 
       expect(surveyResult).toBeNull();
     });
 
     it('should loadBySurveyId return survey result when answers were not registered', async () => {
+      const accountId = await mockAccountId();
       const survey = await mockSurvey();
       const sut = makeSut();
-      const surveyResult = await sut.loadBySurveyId(survey.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId);
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
       expect(surveyResult.answers[0].count).toBe(0);
       expect(surveyResult.answers[0].percent).toBe(0);
+      expect(surveyResult.answers[0].isCurrentAccountAnswer).toBeFalsy();
       expect(surveyResult.answers[1].count).toBe(0);
       expect(surveyResult.answers[1].percent).toBe(0);
+      expect(surveyResult.answers[1].isCurrentAccountAnswer).toBeFalsy();
     });
   });
 });

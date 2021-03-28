@@ -33,12 +33,17 @@ export class SurveyResultsMongoRepository
     );
   }
 
-  async loadBySurveyId(surveyId: string): Promise<SurveyResult> {
+  async loadBySurveyId(
+    surveyId: string,
+    accountId: string,
+  ): Promise<SurveyResult> {
     const surveysCollection = await MongoHelper.getCollection('surveys');
     const isValid = ObjectId.isValid(surveyId);
+
     if (!isValid) {
       return null;
     }
+
     const query = new QueryBuilder()
       .match({
         _id: new ObjectId(surveyId),
@@ -99,7 +104,7 @@ export class SurveyResultsMongoRepository
           image: '$data.answers.image',
           answer: '$data.answers.answer',
           count: '$count',
-          percent: '$percent',
+          percent: { $trunc: { $add: ['$percent', 0.5] } },
         },
       })
       .group({
